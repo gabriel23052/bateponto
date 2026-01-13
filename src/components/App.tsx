@@ -1,5 +1,16 @@
+import Greeting from "./Greeting";
+
+import classes from "./App.module.css";
+
+/**
+ * Container da aplicação
+ */
 const App = () => {
-  return <h1>Hello world</h1>;
+  return (
+    <main className={classes.container}>
+      <Greeting />
+    </main>
+  );
 };
 
 export default App;
