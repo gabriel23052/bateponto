@@ -1,0 +1,219 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  background: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+:root {
+  --standby-xlight: #c2e1ff;
+  --standby-light: #5cadf9;
+  --standby: #087be6;
+  --standby-dark: #1f68ac;
+  --standby-xdark: #103f6c;
+  --activity-xlight: #ffe2ba;
+  --activity-light: #ffc014;
+  --activity: #ff9500;
+  --activity-dark: #b46b05;
+  --activity-xdark: #865108;
+  --neutral-white: #ffffff;
+  --neutral-xlight: #f9f9f9;
+  --neutral-light: #dfdfdf;
+  --neutral-lightgray: #a9a9a9;
+  --neutral-darkgray: #737373;
+  --neutral-dark: #3a3a3a;
+  --neutral-xdark: #1b1b1b;
+  --neutral-black: #000000;
+  --negative-feedback: #ff6550;
+
+  --standby-gradient: linear-gradient(#0084ff, #1ec0e4);
+  --activity-gradient: linear-gradient(#ff9500, #ffc014);
+
+  --default: "Poppins", Arial, sans-serif;
+
+  --px4: 0.25rem;
+  --px8: 0.5rem;
+  --px12: 0.75rem;
+  --px16: 1rem;
+  --px20: 1.25rem;
+  --px28: 1.75rem;
+  --px24: 1.5rem;
+  --px32: 2rem;
+  --px40: 2.5rem;
+  --px48: 3rem;
+  --px64: 4rem;
+  --px100: 6.25rem;
+}
+
+html {
+  font-family: var(--default);
+}
+
+@media (max-width: 800px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+.standby-xlight {
+  color: var(--standby-xlight);
+}
+.bg-standby-xlight {
+  background-color: var(--standby-xlight);
+}
+.standby-light {
+  color: var(--standby-light);
+}
+.bg-standby-light {
+  background-color: var(--standby-light);
+}
+.standby {
+  color: var(--standby);
+}
+.bg-standby {
+  background-color: var(--standby);
+}
+.standby-dark {
+  color: var(--standby-dark);
+}
+.bg-standby-dark {
+  background-color: var(--standby-dark);
+}
+.standby-xdark {
+  color: var(--standby-xdark);
+}
+.bg-standby-xdark {
+  background-color: var(--standby-xdark);
+}
+.activity-xlight {
+  color: var(--activity-xlight);
+}
+.bg-activity-xlight {
+  background-color: var(--activity-xlight);
+}
+.activity-light {
+  color: var(--activity-light);
+}
+.bg-activity-light {
+  background-color: var(--activity-light);
+}
+.activity {
+  color: var(--activity);
+}
+.bg-activity {
+  background-color: var(--activity);
+}
+.activity-dark {
+  color: var(--activity-dark);
+}
+.bg-activity-dark {
+  background-color: var(--activity-dark);
+}
+.activity-xdark {
+  color: var(--activity-xdark);
+}
+.bg-activity-xdark {
+  background-color: var(--activity-xdark);
+}
+.neutral-white {
+  color: var(--neutral-white);
+}
+.bg-neutral-white {
+  background-color: var(--neutral-white);
+}
+.neutral-xlight {
+  color: var(--neutral-xlight);
+}
+.bg-neutral-xlight {
+  background-color: var(--neutral-xlight);
+}
+.neutral-light {
+  color: var(--neutral-light);
+}
+.bg-neutral-light {
+  background-color: var(--neutral-light);
+}
+.neutral-lightgray {
+  color: var(--neutral-lightgray);
+}
+.bg-neutral-lightgray {
+  background-color: var(--neutral-lightgray);
+}
+.neutral-darkgray {
+  color: var(--neutral-darkgray);
+}
+.bg-neutral-darkgray {
+  background-color: var(--neutral-darkgray);
+}
+.neutral-dark {
+  color: var(--neutral-dark);
+}
+.bg-neutral-dark {
+  background-color: var(--neutral-dark);
+}
+.neutral-xdark {
+  color: var(--neutral-xdark);
+}
+.bg-neutral-xdark {
+  background-color: var(--neutral-xdark);
+}
+.neutral-black {
+  color: var(--neutral-black);
+}
+.bg-neutral-black {
+  background-color: var(--neutral-black);
+}
+.negative-feedback {
+  color: var(--negative-feedback);
+}
+.bg-negative-feedback {
+  background-color: var(--negative-feedback);
+}
+
+.text-default {
+  font-family: var(--default);
+  font-size: var(--px16);
+  line-height: var(--px24);
+}
+
+.text-default-m {
+  font-family: var(--default);
+  font-size: var(--px16);
+  line-height: var(--px24);
+  font-weight: 500;
+}
+
+.text-large {
+  font-family: var(--default);
+  font-size: var(--px20);
+  line-height: var(--px28);
+}
+
+.text-display {
+  font-family: var(--default);
+  font-size: var(--px64);
+  line-height: 4.5rem /* 72px */;
+  font-weight: 500;
+}
