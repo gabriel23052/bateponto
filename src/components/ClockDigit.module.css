@@ -1,0 +1,22 @@
+.container {
+  width: var(--px48);
+  height: 4.5rem; /* 72px */
+  position: relative;
+  overflow-y: hidden;
+}
+
+.char0,
+.char1 {
+  display: block;
+  position: absolute;
+  left: 50%;
+  transition: 500ms translate, 500ms opacity, 500ms scale;
+}
+
+.char0 {
+  translate: -50% 0;
+}
+
+.char1 {
+  translate: -50% -100%;
+}

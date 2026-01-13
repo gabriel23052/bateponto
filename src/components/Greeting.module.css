@@ -1,4 +1,6 @@
 .greeting {
-  max-width: 28rem; /* 448px */ 
+  max-width: 28rem; /* 448px */
+  margin-inline: auto;
+  margin-bottom: var(--px32);
   text-align: center;
 }

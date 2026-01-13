@@ -1,4 +1,5 @@
 import Greeting from "./Greeting";
+import Clock from "./Clock";
 
 import classes from "./App.module.css";
 
@@ -9,6 +10,7 @@ const App = () => {
   return (
     <main className={classes.container}>
       <Greeting />
+      <Clock />
     </main>
   );
 };
