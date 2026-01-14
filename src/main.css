@@ -42,8 +42,16 @@
   --neutral-black: #000000;
   --negative-feedback: #ff6550;
 
-  --standby-gradient: linear-gradient(#0084ff, #1ec0e4);
-  --activity-gradient: linear-gradient(#ff9500, #ffc014);
+  --standby-gradient: linear-gradient(to right, #0084ff, #1ec0e4);
+  --activity-gradient: linear-gradient(to right, #ff9500, #ffc014);
+
+  --transition-gradient: linear-gradient(
+    90deg,
+    #0084ff 0%,
+    #1ec0e4 49.99%,
+    #ff9500 50%,
+    #ffc014 100%
+  );
 
   --default: "Poppins", Arial, sans-serif;
 
@@ -209,6 +217,13 @@ html {
   font-family: var(--default);
   font-size: var(--px20);
   line-height: var(--px28);
+}
+
+.text-xlarge {
+  font-family: var(--default);
+  font-size: var(--px24);
+  line-height: var(--px32);
+  font-weight: 500;
 }
 
 .text-display {
