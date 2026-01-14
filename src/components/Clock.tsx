@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
 import ClockDigit from "./ClockDigit";
-import { PageVisibilityContextProvider } from "../contexts/PageVisibilityContext";
 
 import { useActivityContext } from "../contexts/ActivityContext";
+import usePageVisibility from "../hooks/usePageVisibility";
 
 import classes from "./Clock.module.css";
 
 /**
- * Relógio animado
+ * Componente do relógio animado
  */
 const Clock = () => {
   const getDigits = () =>
@@ -22,24 +22,32 @@ const Clock = () => {
 
   const { inActivity } = useActivityContext();
 
+  const isVisible = usePageVisibility();
+
   const interval = useRef<number>(null);
 
   useEffect(() => {
-    interval.current = setInterval(() => {
-      setClock(getDigits);
-    }, 1000);
+    if(isVisible) {
+      interval.current = setInterval(() => {
+        setClock(getDigits);
+      }, 1000);
+    } else {
+      if (interval.current !== null) {
+        clearInterval(interval.current);
+      }
+    }
     return () => {
       if (interval.current !== null) {
         clearInterval(interval.current);
       }
     };
-  }, []);
+  }, [isVisible]);
+
 
   return (
     <section
       className={`${inActivity ? "activity" : "standby"} ${classes.container}`}
     >
-      <PageVisibilityContextProvider>
         <ClockDigit digit={clock[0]} />
         <ClockDigit digit={clock[1]} />
         <span className="text-display">:</span>
@@ -48,7 +56,6 @@ const Clock = () => {
         <span className="text-display">:</span>
         <ClockDigit digit={clock[4]} />
         <ClockDigit digit={clock[5]} />
-      </PageVisibilityContextProvider>
     </section>
   );
 };

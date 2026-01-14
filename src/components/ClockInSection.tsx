@@ -5,6 +5,9 @@ import StopIcon from "../assets/icons/stop.svg?react";
 
 import { useActivityContext } from "../contexts/ActivityContext";
 
+/**
+ * Componente container para o botão de iniciar/finalizar atividade e o status 
+ */
 const ClockInSection = () => {
   const { inActivity, setInActivity } = useActivityContext();
 

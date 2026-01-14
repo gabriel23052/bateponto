@@ -17,6 +17,9 @@ type ContextState = {
 
 const ActivityContext = createContext<ContextState | undefined>(undefined);
 
+/**
+ * Contexto com o estado de atividade do usuário
+ */
 const ActivityContextProvider = ({ children }: Props) => {
   const [inActivity, setInActivity] = useState(false);
 

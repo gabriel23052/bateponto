@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 
-import { usePageVisibilityContext } from "../contexts/PageVisibilityContext";
-
 import classes from "./ClockDigit.module.css";
 
 type Props = {
@@ -9,7 +7,7 @@ type Props = {
 };
 
 /**
- * Dígito animado do relógio
+ * Componente do dígito animado do relógio
  */
 const ClockDigit = ({ digit }: Props) => {
   const hiddenCharIndex = useRef<0 | 1>(1);
@@ -17,11 +15,8 @@ const ClockDigit = ({ digit }: Props) => {
   const previousDigit = useRef<Digit>(digit);
   const firstRender = useRef(true);
 
-  const { isVisible } = usePageVisibilityContext();
-
   const animate = () => {
-    if (chars.current[0] === null || chars.current[1] === null || !isVisible)
-      return;
+    if (chars.current[0] === null || chars.current[1] === null) return;
 
     const [toShowElement, toHideElement] =
       hiddenCharIndex.current === 1
@@ -35,7 +30,6 @@ const ClockDigit = ({ digit }: Props) => {
     toShowElement.style.opacity = "1";
 
     const goesUp = () => {
-      if (!isVisible) return;
       toHideElement.style.translate = "-50% -100%";
       toHideElement.removeEventListener("transitionend", goesUp);
     };
@@ -50,7 +44,6 @@ const ClockDigit = ({ digit }: Props) => {
     }
     animate();
     hiddenCharIndex.current = hiddenCharIndex.current === 0 ? 1 : 0;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [digit]);
 
   return (
@@ -61,6 +54,7 @@ const ClockDigit = ({ digit }: Props) => {
         }}
         className={classes.char0}
       >
+        {/* eslint-disable-next-line react-hooks/refs */}
         {hiddenCharIndex.current === 0 ? digit : previousDigit.current}
       </span>
       <span
@@ -69,6 +63,7 @@ const ClockDigit = ({ digit }: Props) => {
         }}
         className={classes.char1}
       >
+        {/* eslint-disable-next-line react-hooks/refs */}
         {hiddenCharIndex.current === 1 ? digit : previousDigit.current}
       </span>
     </div>

@@ -7,7 +7,7 @@ import { ActivityContextProvider } from "../contexts/ActivityContext";
 import classes from "./App.module.css";
 
 /**
- * Container da aplicação
+ * Componente container da aplicação
  */
 const App = () => {
   return (
