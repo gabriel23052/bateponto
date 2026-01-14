@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 
 import classes from "./ClockDigit.module.css";
 
+const TRANSITION_DELAY = 500;
+
 type Props = {
   digit: Digit;
 };
@@ -29,11 +31,9 @@ const ClockDigit = ({ digit }: Props) => {
     toShowElement.style.translate = "-50% 0";
     toShowElement.style.opacity = "1";
 
-    const goesUp = () => {
+    setTimeout(() => {
       toHideElement.style.translate = "-50% -100%";
-      toHideElement.removeEventListener("transitionend", goesUp);
-    };
-    toHideElement.addEventListener("transitionend", goesUp);
+    }, TRANSITION_DELAY);
   };
 
   useEffect(() => {
