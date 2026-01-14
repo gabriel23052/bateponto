@@ -29,6 +29,9 @@ const MONTHS = [
 
 const DATE_REFRESH_DELAY = 1000;
 
+/** 
+ * Data em formato extendido "DIA_DA_SEMANA, DIA de MÊS de ANO"
+ */
 const DateText = () => {
   const getDate = () => {
     const now = new Date();
