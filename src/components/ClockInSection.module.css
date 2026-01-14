@@ -1,3 +1,7 @@
+.container {
+  position: relative;
+}
+
 .button {
   width: 18.75rem; /* 300px */
   display: flex;
@@ -26,4 +30,12 @@
 
 .button.activity {
   background-position: -100% 0;
+}
+
+.status {
+  position: absolute;
+  transition: top 600ms;
+  left: 50%;
+  z-index: -1;
+  translate: -50% 0;
 }

@@ -1,7 +1,7 @@
 import Greeting from "./Greeting";
 import Clock from "./Clock";
 import DateText from "./DateText";
-import ClockInButton from "./ClockInButton";
+import ClockInSection from "./ClockInSection";
 
 import classes from "./App.module.css";
 
@@ -14,7 +14,7 @@ const App = () => {
       <Greeting />
       <Clock />
       <DateText />
-      <ClockInButton />
+      <ClockInSection />
     </main>
   );
 };
