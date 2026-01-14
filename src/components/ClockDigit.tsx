@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-import { PageVisibilityContext } from "../contexts/PageVisibilityContext";
+import { usePageVisibilityContext } from "../contexts/PageVisibilityContext";
 
 import classes from "./ClockDigit.module.css";
 
@@ -17,14 +17,10 @@ const ClockDigit = ({ digit }: Props) => {
   const previousDigit = useRef<Digit>(digit);
   const firstRender = useRef(true);
 
-  const pageVisibility = useContext(PageVisibilityContext);
+  const { isVisible } = usePageVisibilityContext();
 
   const animate = () => {
-    if (
-      chars.current[0] === null ||
-      chars.current[1] === null ||
-      !pageVisibility.isVisible
-    )
+    if (chars.current[0] === null || chars.current[1] === null || !isVisible)
       return;
 
     const [toShowElement, toHideElement] =
@@ -39,7 +35,7 @@ const ClockDigit = ({ digit }: Props) => {
     toShowElement.style.opacity = "1";
 
     const goesUp = () => {
-      if (!pageVisibility.isVisible) return;
+      if (!isVisible) return;
       toHideElement.style.translate = "-50% -100%";
       toHideElement.removeEventListener("transitionend", goesUp);
     };
@@ -58,7 +54,7 @@ const ClockDigit = ({ digit }: Props) => {
   }, [digit]);
 
   return (
-    <div className={`standby text-display ${classes.container}`}>
+    <div className={`text-display ${classes.container}`}>
       <span
         ref={(el) => {
           chars.current[0] = el;

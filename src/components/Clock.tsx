@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import ClockDigit from "./ClockDigit";
 import { PageVisibilityContextProvider } from "../contexts/PageVisibilityContext";
 
+import { useActivityContext } from "../contexts/ActivityContext";
+
 import classes from "./Clock.module.css";
 
 /**
@@ -18,6 +20,8 @@ const Clock = () => {
 
   const [clock, setClock] = useState<Digit[]>(getDigits);
 
+  const { inActivity } = useActivityContext();
+
   const interval = useRef<number>(null);
 
   useEffect(() => {
@@ -32,14 +36,16 @@ const Clock = () => {
   }, []);
 
   return (
-    <section className={`${classes.container}`}>
+    <section
+      className={`${inActivity ? "activity" : "standby"} ${classes.container}`}
+    >
       <PageVisibilityContextProvider>
         <ClockDigit digit={clock[0]} />
         <ClockDigit digit={clock[1]} />
-        <span className="text-display standby">:</span>
+        <span className="text-display">:</span>
         <ClockDigit digit={clock[2]} />
         <ClockDigit digit={clock[3]} />
-        <span className="text-display standby">:</span>
+        <span className="text-display">:</span>
         <ClockDigit digit={clock[4]} />
         <ClockDigit digit={clock[5]} />
       </PageVisibilityContextProvider>

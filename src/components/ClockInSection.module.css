@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-between;
   margin-inline: auto;
-  padding: var(--px16) var(--px20);
+  padding: var(--px24) var(--px20);
   background: var(--transition-gradient);
   background-size: 37.5rem /* 600px */ 100%;
   background-position: 0px;

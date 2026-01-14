@@ -2,6 +2,7 @@ import Greeting from "./Greeting";
 import Clock from "./Clock";
 import DateText from "./DateText";
 import ClockInSection from "./ClockInSection";
+import { ActivityContextProvider } from "../contexts/ActivityContext";
 
 import classes from "./App.module.css";
 
@@ -11,10 +12,12 @@ import classes from "./App.module.css";
 const App = () => {
   return (
     <main className={classes.container}>
-      <Greeting />
-      <Clock />
-      <DateText />
-      <ClockInSection />
+      <ActivityContextProvider>
+        <Greeting />
+        <Clock />
+        <DateText />
+        <ClockInSection />
+      </ActivityContextProvider>
     </main>
   );
 };

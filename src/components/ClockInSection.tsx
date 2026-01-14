@@ -1,12 +1,12 @@
-import { useState } from "react";
-
 import classes from "./ClockInSection.module.css";
 
 import PlayIcon from "../assets/icons/play.svg?react";
 import StopIcon from "../assets/icons/stop.svg?react";
 
+import { useActivityContext } from "../contexts/ActivityContext";
+
 const ClockInSection = () => {
-  const [inActivity, setInActivity] = useState(false);
+  const { inActivity, setInActivity } = useActivityContext();
 
   return (
     <section className={classes.container}>

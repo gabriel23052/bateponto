@@ -1,4 +1,10 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 type Props = {
   children: ReactNode;
@@ -7,7 +13,9 @@ type Props = {
 /**
  * Um estado que reflete se a página está sendo mostrada para o úsuario
  */
-const PageVisibilityContext = createContext({ isVisible: true });
+const PageVisibilityContext = createContext<{ isVisible: boolean } | undefined>(
+  undefined
+);
 
 const PageVisibilityContextProvider = ({ children }: Props) => {
   const [isVisible, setIsVisible] = useState(!document.hidden);
@@ -29,4 +37,12 @@ const PageVisibilityContextProvider = ({ children }: Props) => {
   );
 };
 
-export { PageVisibilityContext, PageVisibilityContextProvider };
+const usePageVisibilityContext = () => {
+  const ctx = useContext(PageVisibilityContext);
+  if (ctx === undefined)
+    throw new Error("PageVisibilityContextProvider not found");
+  return ctx;
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { PageVisibilityContextProvider, usePageVisibilityContext };
