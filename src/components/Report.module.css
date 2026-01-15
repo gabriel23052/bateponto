@@ -1,0 +1,42 @@
+.button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--px12);
+  padding-inline: var(--px16);
+  border-radius: 16px;
+  corner-shape: squircle;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  outline: 2px solid transparent;
+  outline-offset: var(--px8);
+  cursor: pointer;
+  transition: outline-color 400ms;
+  position: relative;
+}
+.button:focus,
+.button:hover {
+  outline-color: var(--standby);
+}
+.button.activity:focus,
+.button.activity:hover {
+  outline-color: var(--activity);
+}
+
+.sum svg {
+  color: var(--standby);
+  transition: 500ms color;
+}
+.sum svg.activity {
+  color: var(--activity);
+}
+
+.sum > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: var(--px4);
+}
+
+.alert {
+  translate: 0 2px;
+}

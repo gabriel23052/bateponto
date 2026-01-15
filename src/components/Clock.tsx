@@ -16,9 +16,9 @@ const Clock = () => {
       .toString()
       .substring(16, 24)
       .replaceAll(":", "")
-      .split("") as Digit[];
+      .split("") as TDigit[];
 
-  const [clock, setClock] = useState<Digit[]>(getDigits);
+  const [clock, setClock] = useState<TDigit[]>(getDigits);
 
   const { inActivity } = useActivityContext();
 
@@ -27,7 +27,7 @@ const Clock = () => {
   const interval = useRef<number>(null);
 
   useEffect(() => {
-    if(isVisible) {
+    if (isVisible) {
       interval.current = setInterval(() => {
         setClock(getDigits);
       }, 1000);
@@ -43,19 +43,18 @@ const Clock = () => {
     };
   }, [isVisible]);
 
-
   return (
     <section
       className={`${inActivity ? "activity" : "standby"} ${classes.container}`}
     >
-        <ClockDigit digit={clock[0]} />
-        <ClockDigit digit={clock[1]} />
-        <span className="text-display">:</span>
-        <ClockDigit digit={clock[2]} />
-        <ClockDigit digit={clock[3]} />
-        <span className="text-display">:</span>
-        <ClockDigit digit={clock[4]} />
-        <ClockDigit digit={clock[5]} />
+      <ClockDigit digit={clock[0]} />
+      <ClockDigit digit={clock[1]} />
+      <span className="text-display">:</span>
+      <ClockDigit digit={clock[2]} />
+      <ClockDigit digit={clock[3]} />
+      <span className="text-display">:</span>
+      <ClockDigit digit={clock[4]} />
+      <ClockDigit digit={clock[5]} />
     </section>
   );
 };

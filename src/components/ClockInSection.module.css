@@ -1,4 +1,5 @@
 .container {
+  margin-bottom: var(--px64);
   position: relative;
 }
 

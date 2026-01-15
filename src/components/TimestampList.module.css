@@ -1,0 +1,7 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--px48), 1fr));
+  gap: var(--px16) var(--px8);
+  flex: 1;
+  padding: var(--px16);
+}

@@ -5,7 +5,7 @@ import classes from "./ClockDigit.module.css";
 const TRANSITION_DELAY = 500;
 
 type Props = {
-  digit: Digit;
+  digit: TDigit;
 };
 
 /**
@@ -14,7 +14,7 @@ type Props = {
 const ClockDigit = ({ digit }: Props) => {
   const hiddenCharIndex = useRef<0 | 1>(1);
   const chars = useRef<(HTMLSpanElement | null)[]>([null, null]);
-  const previousDigit = useRef<Digit>(digit);
+  const previousDigit = useRef<TDigit>(digit);
   const firstRender = useRef(true);
 
   const animate = () => {

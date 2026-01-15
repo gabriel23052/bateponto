@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--px16);   
+  background-image: url("../assets/icons/timestamp-arrow.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+} 
