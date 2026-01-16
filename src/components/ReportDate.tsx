@@ -1,7 +1,7 @@
 import classes from "./ReportDate.module.css";
 
 type Props = {
-  date: TReportDate;
+  date: TReportViewDate;
 };
 
 /**

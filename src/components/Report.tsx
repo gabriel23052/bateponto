@@ -9,7 +9,7 @@ import { useActivityContext } from "../contexts/ActivityContext";
 import classes from "./Report.module.css";
 
 type Props = {
-  dayReport: TReport;
+  dayReport: TReportView;
 };
 
 /**

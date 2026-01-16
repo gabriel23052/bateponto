@@ -7,8 +7,10 @@ import Report from "./Report";
 
 import classes from "./App.module.css";
 
+import "../debug/clockHandler";
+
 // Temporário
-const DAY_REPORT: TReport = {
+const DAY_REPORT: TReportView = {
   date: {
     today: false,
     shortDate: "28/05",
@@ -20,8 +22,8 @@ const DAY_REPORT: TReport = {
     ["20:52", "22:45"],
     ["20:53", "22:45"],
     ["20:54", "22:45"],
-    ["20:54", "22:45"],
-    ["20:54", "22:45"],
+    ["20:55", "22:45"],
+    ["20:56", "22:45"],
   ],
   sum: "10:55",
   missingTimestamp: true,
