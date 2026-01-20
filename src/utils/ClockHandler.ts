@@ -43,8 +43,8 @@ export default class ClockHandler {
       }
       return reports;
     })();
-    reports.forEach(([rpTimestampKey, rp]) => {
-      this.reportsMap.set(rpTimestampKey, rp);
+    reports.forEach(([timestampId, rp]) => {
+      this.reportsMap.set(timestampId, rp);
     });
   }
 
@@ -62,12 +62,15 @@ export default class ClockHandler {
    * para os últimos 30 dias caso ainda não exista
    */
   private createReports() {
-    const todayDate = new Date();
-    DateUtility.resetToZeroAtClock(todayDate);
+    const todayDate = DateUtility.getReportIdFromDate(new Date());
     for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
-      const reportTimestampKey = todayDate.getTime() - i * MILLISECONDS_IN_DAY;
-      const emptyReport: TReport = { checkpoints: [], sum: 0 };
-      this.reportsMap.set(reportTimestampKey, emptyReport);
+      const timestampId = todayDate - i * MILLISECONDS_IN_DAY;
+      const emptyReport: TReport = {
+        timestampId: timestampId,
+        checkpoints: [],
+        sum: 0,
+      };
+      this.reportsMap.set(timestampId, emptyReport);
     }
     this.updateLocalStorage();
   }
@@ -77,18 +80,19 @@ export default class ClockHandler {
    * adicionando novas entradas vazias conforme necessário
    */
   private updateReportsRange() {
-    const reportsTimestampKeys = Array.from(this.reportsMap.keys());
-    const limitTimestamp =
-      DateUtility.resetToZeroAtClock(new Date()).getTime() -
-      (REPORTS_RANGE_DAYS - 1) * MILLISECONDS_IN_DAY;
-    const toErase = reportsTimestampKeys.filter(
-      (rpTimestampKey) => rpTimestampKey < limitTimestamp,
+    const reportTimestampIds = Array.from(this.reportsMap.keys());
+    const todayTimestampId = DateUtility.getReportIdFromDate(new Date());
+    const limitTimestampId =
+      todayTimestampId - (REPORTS_RANGE_DAYS - 1) * MILLISECONDS_IN_DAY;
+    const toErase = reportTimestampIds.filter(
+      (timestampId) => timestampId < limitTimestampId,
     );
     if (toErase.length === 0) return;
-    const todayDate = DateUtility.resetToZeroAtClock(new Date());
     for (let i = 0; i < toErase.length; i++) {
       this.reportsMap.delete(toErase[i]);
-      this.reportsMap.set(todayDate.getTime() - i * MILLISECONDS_IN_DAY, {
+      const timestampId = todayTimestampId - i * MILLISECONDS_IN_DAY;
+      this.reportsMap.set(timestampId, {
+        timestampId,
         checkpoints: [],
         sum: 0,
       });
@@ -97,17 +101,33 @@ export default class ClockHandler {
   }
 
   /**
-   * Adiciona uma nova batida em um report
+   * Adiciona uma nova batida em um relatório
    */
-  public addTimestamp(clockInDate: Date) {
-    const reportTimestampKey = DateUtility.resetToZeroAtClock(
-      new Date(clockInDate),
-    ).getTime();
-    const report = this.reportsMap.get(reportTimestampKey);
-    if (!report) throw new Error("Report don't found: " + reportTimestampKey);
+  public addCheckpoint(clockInDate: Date) {
+    const timestampId = DateUtility.getReportIdFromDate(clockInDate);
+    const report = this.reportsMap.get(timestampId);
+    if (!report) throw new Error("Report don't found: " + timestampId);
     const reportHandler = new ReportHandler(report);
     reportHandler.addCheckpoint(clockInDate);
     this.updateLocalStorage();
+  }
+
+  /**
+   * Retorna os relatórios dado um número de dias atrás e 
+   * a quantidade
+   */
+  public getReports(daysOffset: number, amount: number): TReportView[] {
+    const todayTimestampId = DateUtility.getReportIdFromDate(new Date());
+    const reports: TReportView[] = [];
+    for (let i = 0; i < amount; i++) {
+      const targetTimestampId =
+        todayTimestampId -
+        (daysOffset * MILLISECONDS_IN_DAY + i * MILLISECONDS_IN_DAY);
+      const report = this.reportsMap.get(targetTimestampId);
+      if (!report) continue;
+      reports.push(ReportHandler.getViewFormat(report));
+    }
+    return reports;
   }
 
   /**
@@ -118,10 +138,10 @@ export default class ClockHandler {
     const reports: TReportKeyValue[] = Array.from(
       this.reportsMap.entries(),
     ).sort((a, b) => b[0] - a[0]);
-    const humanFormatReports = reports.map(([timestampKey, rp]) => {
-      const reportDate = new Date(timestampKey);
-      const humanDate = reportDate.toLocaleDateString("pt-BR");
-      const humamCheckpoints =
+    const viewFormatReports = reports.map(([timestampId, rp]) => {
+      const reportDate = new Date(timestampId);
+      const viewDate = reportDate.toLocaleDateString("pt-BR");
+      const viewCheckpoints =
         rp.checkpoints
           .map((ts) => {
             const date = new Date(ts);
@@ -132,9 +152,9 @@ export default class ClockHandler {
           })
           .join(" - ") +
         " --> " +
-        DateUtility.humanTimeFromMilliseconds(rp.sum);
-      return [humanDate, humamCheckpoints];
+        DateUtility.viewTimeFromMilliseconds(rp.sum);
+      return [viewDate, viewCheckpoints];
     });
-    console.table(humanFormatReports);
+    console.table(viewFormatReports);
   }
 }

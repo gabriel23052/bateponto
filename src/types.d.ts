@@ -9,6 +9,7 @@ type TReportViewDate = {
 };
 
 type TReportView = {
+  timestampId: number;
   date: TReportViewDate;
   checkpoints: string[][];
   sum: string;
@@ -16,13 +17,9 @@ type TReportView = {
 };
 
 type TReport = {
+  timestampId: number;
   checkpoints: number[];
   sum: number;
-};
-
-type TReportHumanFormat = {
-  checkpoints: string[];
-  sum: string;
 };
 
 type TReportKeyValue = [number, TReport];

@@ -5,12 +5,12 @@ import DateUtility from "./DateUtility";
  */
 export default class ReportHandler {
   /**
-   *  Referência do report a ser manipulado
+   * Referência do report a ser manipulado
    */
-  private reports: TReport;
+  private report: TReport;
 
   constructor(report: TReport) {
-    this.reports = report;
+    this.report = report;
   }
 
   /**
@@ -18,10 +18,10 @@ export default class ReportHandler {
    */
   public addCheckpoint(clockInJsDate: Date) {
     const timestamp = clockInJsDate.getTime();
-    if (this.reports.checkpoints.includes(timestamp))
+    if (this.report.checkpoints.includes(timestamp))
       throw new Error("Checkpoint already exists in the report.");
-    this.reports.checkpoints.push(timestamp);
-    this.reports.checkpoints.sort((a, b) => a - b);
+    this.report.checkpoints.push(timestamp);
+    this.report.checkpoints.sort((a, b) => a - b);
     this.calculateSum();
   }
 
@@ -30,32 +30,38 @@ export default class ReportHandler {
    */
   private calculateSum() {
     let sum = 0;
-    for (let i = 0; i < this.reports.checkpoints.length; i += 2) {
-      if (i + 1 < this.reports.checkpoints.length) {
-        sum += this.reports.checkpoints[i + 1] - this.reports.checkpoints[i];
+    for (let i = 0; i < this.report.checkpoints.length; i += 2) {
+      if (i + 1 < this.report.checkpoints.length) {
+        sum += this.report.checkpoints[i + 1] - this.report.checkpoints[i];
       }
     }
-    this.reports.sum = sum;
+    this.report.sum = sum;
   }
 
   /**
-   * Converte os horários dos relatórios de formato humano para timestamps
+   * Retorna um relatório na forma de visualização a partir de
+   * um relatório comum
    */
-  public static parseReportToTimestamps(
-    humanReport: TReportHumanFormat,
-  ): TReport {
-    const today = DateUtility.resetToZeroAtClock(new Date());
+  public static getViewFormat(report: TReport): TReportView {
+    const date = DateUtility.getReportViewDate(new Date(report.timestampId));
+    const checkpoints: string[][] = [];
+    for (let i = 0; i < report.checkpoints.length; i += 2) {
+      const viewCheckpoint = [
+        DateUtility.viewTimeFromTimestamp(report.checkpoints[i]),
+      ];
+      if (report.checkpoints[i + 1]) {
+        viewCheckpoint.push(
+          DateUtility.viewTimeFromTimestamp(report.checkpoints[i + 1]),
+        );
+      }
+      checkpoints.push(viewCheckpoint);
+    }
     return {
-      checkpoints: humanReport.checkpoints.map((ch) => {
-        const [hour, minute] = ch.split(":").map(Number);
-        today.setHours(hour);
-        today.setMinutes(minute);
-        return today.getTime();
-      }),
-      sum: (() => {
-        const [hour, minute] = humanReport.sum.split(":").map(Number);
-        return hour * 60 * 60 * 1000 + minute * 60 * 1000;
-      })(),
+      timestampId: report.timestampId,
+      date,
+      checkpoints,
+      missingCheckpoint: report.checkpoints.length % 2 !== 0,
+      sum: DateUtility.viewTimeFromMilliseconds(report.sum),
     };
   }
 }
