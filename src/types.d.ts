@@ -10,12 +10,19 @@ type TReportViewDate = {
 
 type TReportView = {
   date: TReportViewDate;
-  timestamps: string[][];
+  checkpoints: string[][];
   sum: string;
-  missingTimestamp: boolean;
+  missingCheckpoint: boolean;
 };
 
 type TReport = {
-  timestamps: number[];
+  checkpoints: number[];
   sum: number;
-}
+};
+
+type TReportHumanFormat = {
+  checkpoints: string[];
+  sum: string;
+};
+
+type TReportKeyValue = [number, TReport];

@@ -25,10 +25,10 @@ const Report = ({ dayReport }: Props) => {
       }`}
     >
       <ReportDate date={dayReport.date} />
-      <TimestampList timestamps={dayReport.timestamps} />
+      <TimestampList timestamps={dayReport.checkpoints} />
       <div className={classes.sum}>
         <div>
-          {dayReport.missingTimestamp && (
+          {dayReport.missingCheckpoint && (
             <AlertIcon width={20} height={20} className={classes.alert} />
           )}
           <ClockIcon
