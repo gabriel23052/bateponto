@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 import ClockDigit from "./ClockDigit";
 
-import { useActivityContext } from "../contexts/ActivityContext";
 import usePageVisibility from "../hooks/usePageVisibility";
+import { useClockContext } from "../contexts/ClockContext";
 
 import classes from "./Clock.module.css";
 
@@ -20,7 +20,7 @@ const Clock = () => {
 
   const [clock, setClock] = useState<TDigit[]>(getDigits);
 
-  const { inActivity } = useActivityContext();
+  const { inActivity } = useClockContext();
 
   const isVisible = usePageVisibility();
 

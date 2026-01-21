@@ -1,4 +1,4 @@
-import classes from "./Timestamp.module.css";
+import classes from "./Checkpoint.module.css";
 
 type Props = {
   start: string;
@@ -8,7 +8,7 @@ type Props = {
 /**
  * Exibe um período
  */
-const Timestamp = ({ start, end }: Props) => {
+const Checkpoint = ({ start, end }: Props) => {
   return (
     <li className={`neutral-dark text-default-m ${classes.container}`}>
       <time dateTime={start}>{start}</time>
@@ -17,4 +17,4 @@ const Timestamp = ({ start, end }: Props) => {
   );
 };
 
-export default Timestamp;
+export default Checkpoint;

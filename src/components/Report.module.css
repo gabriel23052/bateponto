@@ -1,5 +1,6 @@
 .button {
   width: 100%;
+  min-height: 6.25rem;
   display: flex;
   align-items: center;
   gap: var(--px12);
@@ -20,6 +21,11 @@
 .button.activity:focus,
 .button.activity:hover {
   outline-color: var(--activity);
+}
+
+.noActivity {
+  text-align: center;
+  flex: 1;
 }
 
 .sum svg {

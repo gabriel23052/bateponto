@@ -1,15 +1,72 @@
-import classes from "./ClockInSection.module.css";
+import { useEffect, useRef, useState } from "react";
 
 import PlayIcon from "../assets/icons/play.svg?react";
 import StopIcon from "../assets/icons/stop.svg?react";
 
-import { useActivityContext } from "../contexts/ActivityContext";
+import { useClockContext } from "../contexts/ClockContext";
+
+import classes from "./ClockInSection.module.css";
+
+const BLOCK_TIMESTAMP_STORAGE_KEY = "blockedUntil";
 
 /**
- * Componente container para o botão de iniciar/finalizar atividade e o status 
+ * Seção de controle das batidas
  */
 const ClockInSection = () => {
-  const { inActivity, setInActivity } = useActivityContext();
+  const { addCheckpoint, inActivity, todayReport } = useClockContext();
+
+  const [blocked, setBlocked] = useState(() => {
+    return (
+      Number(localStorage.getItem(BLOCK_TIMESTAMP_STORAGE_KEY) || 0) >=
+      new Date().getTime()
+    );
+  });
+
+  const timeout = useRef<number | null>(null);
+
+  const setupTimeout = () => {
+    const now = new Date();
+    const blockedUntil = Number(
+      localStorage.getItem(BLOCK_TIMESTAMP_STORAGE_KEY) || 0,
+    );
+    const difference = blockedUntil - now.getTime();
+    if (difference > 0) {
+      timeout.current = setTimeout(() => {
+        setBlocked(false);
+      }, difference);
+    }
+  };
+
+  useEffect(() => {
+    setupTimeout();
+    return () => {
+      if (timeout.current !== null) {
+        clearTimeout(timeout.current);
+      }
+    };
+  }, []);
+
+  const handleClick = () => {
+    if (blocked) return; // TODO: Feedback
+    if (!inActivity) {
+      setBlocked(true);
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 1, 0, 0);
+      const blockTimestamp = now.getTime();
+      localStorage.setItem(
+        BLOCK_TIMESTAMP_STORAGE_KEY,
+        blockTimestamp.toString(),
+      );
+      setupTimeout();
+    }
+    addCheckpoint();
+  };
+
+  const getLastCheckpoint = () => {
+    const lastCheckpoint =
+      todayReport.checkpoints[todayReport.checkpoints.length - 1];
+    return lastCheckpoint ? lastCheckpoint[0] : null;
+  };
 
   return (
     <section className={classes.container}>
@@ -17,7 +74,7 @@ const ClockInSection = () => {
         className={`neutral-white text-xlarge ${classes.button} ${
           inActivity ? classes.activity : ""
         }`}
-        onClick={() => setInActivity((prev) => !prev)}
+        onClick={handleClick}
       >
         {inActivity ? (
           <>
@@ -37,7 +94,7 @@ const ClockInSection = () => {
           top: inActivity ? "calc(100% + var(--px8))" : "0px",
         }}
       >
-        Em atividade desde 22:21
+        Em atividade desde {getLastCheckpoint()}
       </p>
     </section>
   );

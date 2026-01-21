@@ -1,22 +1,23 @@
 import ReportDate from "./ReportDate";
-import TimestampList from "./TimestampList";
+import CheckpointList from "./CheckpointList";
+
+import { useClockContext } from "../contexts/ClockContext";
 
 import ClockIcon from "../assets/icons/clock.svg?react";
 import AlertIcon from "../assets/icons/alert.svg?react";
 
-import { useActivityContext } from "../contexts/ActivityContext";
-
 import classes from "./Report.module.css";
 
 type Props = {
-  dayReport: TReportView;
+  report: TReportView;
+  disableAlert?: boolean;
 };
 
 /**
- * Exibe o histórico de períodos de um terminado dia
+ * Exibe o histórico de períodos de um determinado dia
  */
-const Report = ({ dayReport }: Props) => {
-  const { inActivity } = useActivityContext();
+const Report = ({ report, disableAlert }: Props) => {
+  const { inActivity } = useClockContext();
 
   return (
     <button
@@ -24,21 +25,29 @@ const Report = ({ dayReport }: Props) => {
         inActivity ? classes.activity : ""
       }`}
     >
-      <ReportDate date={dayReport.date} />
-      <TimestampList timestamps={dayReport.checkpoints} />
-      <div className={classes.sum}>
-        <div>
-          {dayReport.missingCheckpoint && (
-            <AlertIcon width={20} height={20} className={classes.alert} />
-          )}
-          <ClockIcon
-            className={inActivity ? classes.activity : ""}
-            width={21}
-            height={24}
-          />
-        </div>
-        <p className="neutral-dark text-large">{dayReport.sum}</p>
-      </div>
+      <ReportDate date={report.date} />
+      {report.checkpoints.length === 0 ? (
+        <p className={`neutral-lightgray text-default ${classes.noActivity}`}>
+          Sem atividade
+        </p>
+      ) : (
+        <>
+          <CheckpointList checkpoints={report.checkpoints} />
+          <div className={classes.sum}>
+            <div>
+              {report.missingCheckpoint && !disableAlert && (
+                <AlertIcon width={20} height={20} className={classes.alert} />
+              )}
+              <ClockIcon
+                className={inActivity ? classes.activity : ""}
+                width={21}
+                height={24}
+              />
+            </div>
+            <p className="neutral-dark text-large">{report.sum}</p>
+          </div>
+        </>
+      )}
     </button>
   );
 };

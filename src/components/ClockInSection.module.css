@@ -18,7 +18,9 @@
   corner-shape: squircle;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  transition: 500ms background-position, 300ms scale;
+  transition:
+    500ms background-position,
+    300ms scale;
 }
 
 .button:hover {
@@ -34,6 +36,7 @@
 }
 
 .status {
+  width: max-content;
   position: absolute;
   transition: top 600ms;
   left: 50%;
