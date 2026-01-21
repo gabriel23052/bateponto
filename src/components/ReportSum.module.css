@@ -1,0 +1,24 @@
+.container {
+  padding-left: var(--px4);
+  width: 3.75rem /* 60px */
+}
+
+.container svg {
+  color: var(--standby);
+  transition: 500ms color;
+}
+.container svg.activity {
+  color: var(--activity);
+}
+
+.container > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--px4);
+  margin-bottom: var(--px4);
+}
+
+.alert {
+  translate: 0 2px;
+}

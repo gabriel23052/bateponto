@@ -8,6 +8,9 @@ import classes from "./History.module.css";
 
 const OBSERVER_HEIGHT = "12.5rem";
 
+/**
+ * Componente que exibe o histórico de batidas
+ */
 const History = () => {
   const { history, orderMoreReports } = useClockContext();
   const observerElement = useRef<HTMLDivElement>(null);

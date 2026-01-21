@@ -10,7 +10,7 @@ import classes from "./ClockInSection.module.css";
 const BLOCK_TIMESTAMP_STORAGE_KEY = "blockedUntil";
 
 /**
- * Seção de controle das batidas
+ * Componente que exibe o botão de batida e o status
  */
 const ClockInSection = () => {
   const { addCheckpoint, inActivity, todayReport } = useClockContext();

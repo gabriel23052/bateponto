@@ -1,0 +1,36 @@
+import ClockIcon from "../assets/icons/clock.svg?react";
+import AlertIcon from "../assets/icons/alert.svg?react";
+import classes from "./ReportSum.module.css";
+
+type Props = {
+  sum: string;
+  missingCheckpoint?: boolean;
+  disableAlert?: boolean;
+  inActivity: boolean;
+};
+
+/**
+ * Componente que exibe a soma dos períodos
+ */
+const ReportSum = ({
+  sum,
+  missingCheckpoint,
+  disableAlert,
+  inActivity,
+}: Props) => (
+  <div className={classes.container}>
+    <div>
+      {missingCheckpoint && !disableAlert && (
+        <AlertIcon width={20} height={20} className={classes.alert} />
+      )}
+      <ClockIcon
+        className={inActivity ? classes.activity : ""}
+        width={21}
+        height={24}
+      />
+    </div>
+    <p className="neutral-dark text-large">{sum}</p>
+  </div>
+);
+
+export default ReportSum;

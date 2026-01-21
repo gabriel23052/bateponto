@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   gap: var(--px12);
-  padding-inline: var(--px16);
+  padding: var(--px16);
   border-radius: 16px;
   corner-shape: squircle;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
@@ -15,6 +15,12 @@
   transition: outline-color 400ms;
   position: relative;
   animation: fromLeft 500ms forwards;
+
+  @media (max-width: 500px) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding-block: var(--px16);
+  }
 }
 .button:focus,
 .button:hover {
@@ -28,25 +34,6 @@
 .noActivity {
   text-align: center;
   flex: 1;
-}
-
-.sum svg {
-  color: var(--standby);
-  transition: 500ms color;
-}
-.sum svg.activity {
-  color: var(--activity);
-}
-
-.sum > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-bottom: var(--px4);
-}
-
-.alert {
-  translate: 0 2px;
 }
 
 @keyframes fromLeft {

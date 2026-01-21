@@ -3,10 +3,8 @@ import CheckpointList from "./CheckpointList";
 
 import { useClockContext } from "../contexts/ClockContext";
 
-import ClockIcon from "../assets/icons/clock.svg?react";
-import AlertIcon from "../assets/icons/alert.svg?react";
-
 import classes from "./Report.module.css";
+import ReportSum from "./ReportSum";
 
 type Props = {
   report: TReportView;
@@ -14,7 +12,7 @@ type Props = {
 };
 
 /**
- * Exibe o histórico de períodos de um determinado dia
+ * Componente que exibe o histórico de períodos de um determinado dia
  */
 const Report = ({ report, disableAlert }: Props) => {
   const { inActivity } = useClockContext();
@@ -33,19 +31,12 @@ const Report = ({ report, disableAlert }: Props) => {
       ) : (
         <>
           <CheckpointList checkpoints={report.checkpoints} />
-          <div className={classes.sum}>
-            <div>
-              {report.missingCheckpoint && !disableAlert && (
-                <AlertIcon width={20} height={20} className={classes.alert} />
-              )}
-              <ClockIcon
-                className={inActivity ? classes.activity : ""}
-                width={21}
-                height={24}
-              />
-            </div>
-            <p className="neutral-dark text-large">{report.sum}</p>
-          </div>
+          <ReportSum
+            sum={report.sum}
+            missingCheckpoint={report.missingCheckpoint}
+            disableAlert={disableAlert}
+            inActivity={inActivity}
+          />
         </>
       )}
     </button>
