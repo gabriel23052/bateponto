@@ -1,0 +1,24 @@
+.button {
+  min-width: 8rem; /* 128px */ 
+  padding: var(--px4) var(--px16);
+  background: var(--standby-gradient);
+  border-radius: 8px;
+  corner-shape: squircle;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: 300ms scale;
+}
+.button.activity {
+  background: var(--activity-gradient);
+}
+.button:hover {
+  scale: 1.05;
+}
+.button:focus { 
+  outline: var(--standby) 2px solid;
+  outline-offset: 2px;
+}
+.button.activity:focus {
+  outline: var(--activity) 2px solid;
+  outline-offset: 2px;
+}

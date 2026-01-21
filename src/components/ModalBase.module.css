@@ -1,0 +1,21 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: var(--px16);
+  opacity: 0;
+  animation: fade 300ms forwards;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+}
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+}

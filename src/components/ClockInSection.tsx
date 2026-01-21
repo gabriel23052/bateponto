@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import PlayIcon from "../assets/icons/play.svg?react";
 import StopIcon from "../assets/icons/stop.svg?react";
+import ModalNotice from "./ModalNotice";
 
 import { useClockContext } from "../contexts/ClockContext";
 
@@ -15,6 +16,7 @@ const BLOCK_TIMESTAMP_STORAGE_KEY = "blockedUntil";
 const ClockInSection = () => {
   const { addCheckpoint, inActivity, todayReport } = useClockContext();
 
+  const [showNoticeModal, setShowNoticeModal] = useState(true);
   const [blocked, setBlocked] = useState(() => {
     return (
       Number(localStorage.getItem(BLOCK_TIMESTAMP_STORAGE_KEY) || 0) >=
@@ -47,7 +49,10 @@ const ClockInSection = () => {
   }, []);
 
   const handleClick = () => {
-    if (blocked) return; // TODO: Feedback
+    if (blocked) {
+      setShowNoticeModal(true);
+      return;
+    }
     if (!inActivity) {
       setBlocked(true);
       const now = new Date();
@@ -68,8 +73,19 @@ const ClockInSection = () => {
     return lastCheckpoint ? lastCheckpoint[0] : null;
   };
 
+  const closeModal = () => {
+    setShowNoticeModal(false);
+  };
+
   return (
     <section className={classes.container}>
+      {showNoticeModal && (
+        <ModalNotice closeModal={closeModal}>
+          Ops! Parece que você já bateu o ponto às{" "}
+          {getLastCheckpoint() || "00:00"}, para bater novamente aguarde o
+          minuto virar.
+        </ModalNotice>
+      )}
       <button
         className={`neutral-white text-xlarge ${classes.button} ${
           inActivity ? classes.activity : ""
