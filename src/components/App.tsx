@@ -3,6 +3,7 @@ import Clock from "./Clock";
 import DateText from "./DateText";
 import ClockInSection from "./ClockInSection";
 import TodayReport from "./TodayReport";
+import History from "./History";
 import { ClockContextProvider } from "../contexts/ClockContext";
 
 import classes from "./App.module.css";
@@ -19,6 +20,7 @@ const App = () => {
         <DateText />
         <ClockInSection />
         <TodayReport />
+        <History />
       </ClockContextProvider>
     </main>
   );

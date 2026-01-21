@@ -1,0 +1,13 @@
+.container {
+  padding-top: var(--px40);
+}
+
+.title {
+  margin-bottom: var(--px24);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--px16);
+}

@@ -9,10 +9,12 @@
   corner-shape: squircle;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   outline: 2px solid transparent;
+  opacity: 0;
   outline-offset: var(--px8);
   cursor: pointer;
   transition: outline-color 400ms;
   position: relative;
+  animation: fromLeft 500ms forwards;
 }
 .button:focus,
 .button:hover {
@@ -45,4 +47,16 @@
 
 .alert {
   translate: 0 2px;
+}
+
+@keyframes fromLeft {
+  from {
+    translate: -50px 0px;
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0px 0px;
+  }
 }

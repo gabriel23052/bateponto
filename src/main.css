@@ -21,6 +21,15 @@
   box-sizing: border-box;
 }
 
+h1,
+h2 {
+  font-weight: 400;
+}
+
+ul {
+  list-style: none;
+}
+
 :root {
   --standby-xlight: #c2e1ff;
   --standby-light: #5cadf9;

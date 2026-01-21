@@ -15,8 +15,12 @@ type ProviderProps = {
 type ContextValue = {
   todayReport: TReportView;
   inActivity: boolean;
+  history: { reachedEnd: boolean; data: TReportView[] };
   addCheckpoint: () => void;
+  orderMoreReports: () => void;
 };
+
+const REPORTS_ORDER_AMOUNT = 5;
 
 /**
  * Contexto que mantém o estado das batidas e históricos, se
@@ -31,6 +35,12 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     clockHandler.getReports(0, 1)[0],
   );
 
+  const [history, setHistory] = useState(() => {
+    const data = clockHandler.getReports(1, REPORTS_ORDER_AMOUNT);
+    const reachedEnd = data.length < REPORTS_ORDER_AMOUNT;
+    return { reachedEnd, data };
+  });
+
   const inActivity = useMemo(
     () => todayReport.missingCheckpoint,
     [todayReport],
@@ -41,8 +51,31 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     setTodayReport(clockHandler.getReports(0, 1)[0]);
   };
 
+  const orderMoreReports = () => {
+    if (history.reachedEnd) return;
+    setHistory((prev) => {
+      const newData = clockHandler.getReports(
+        prev.data.length + 1,
+        REPORTS_ORDER_AMOUNT,
+      );
+      const reachedEnd = newData.length < REPORTS_ORDER_AMOUNT;
+      return {
+        reachedEnd,
+        data: [...prev.data, ...newData],
+      };
+    });
+  };
+
   return (
-    <ClockContext value={{ todayReport, addCheckpoint, inActivity }}>
+    <ClockContext
+      value={{
+        todayReport,
+        addCheckpoint,
+        inActivity,
+        history,
+        orderMoreReports,
+      }}
+    >
       {children}
     </ClockContext>
   );
