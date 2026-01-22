@@ -1,7 +1,6 @@
 import {
   createContext,
   useContext,
-  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -13,9 +12,8 @@ type ProviderProps = {
 };
 
 type ContextValue = {
-  todayReport: TReportView;
   inActivity: boolean;
-  history: { reachedEnd: boolean; data: TReportView[] };
+  reports: { reachedEnd: boolean; data: TReportView[] };
   addCheckpoint: () => void;
   orderMoreReports: () => void;
 };
@@ -31,29 +29,29 @@ const ClockContext = createContext<ContextValue | undefined>(undefined);
 const clockHandler = new ClockHandler();
 
 const ClockContextProvider = ({ children }: ProviderProps) => {
-  const [todayReport, setTodayReport] = useState(
-    clockHandler.getReports(0, 1)[0],
-  );
-
-  const [history, setHistory] = useState(() => {
-    const data = clockHandler.getReports(1, REPORTS_ORDER_AMOUNT);
+  const [reports, setReports] = useState(() => {
+    const data = clockHandler.getReports(0, REPORTS_ORDER_AMOUNT);
     const reachedEnd = data.length < REPORTS_ORDER_AMOUNT;
     return { reachedEnd, data };
   });
 
-  const inActivity = useMemo(
-    () => todayReport.missingCheckpoint,
-    [todayReport],
-  );
+  const [inActivity, setInActivity] = useState(reports.data[0].missingCheckpoint);
 
   const addCheckpoint = () => {
-    clockHandler.addCheckpoint(new Date());
-    setTodayReport(clockHandler.getReports(0, 1)[0]);
+    const updatedReport = clockHandler.addCheckpoint(new Date());
+    setInActivity(updatedReport.missingCheckpoint);
+    setReports((prev) => {
+      const index = prev.data.findIndex(
+        (rp) => rp.timestampId === updatedReport.timestampId,
+      );
+      prev.data[index] = updatedReport;
+      return prev;
+    });
   };
 
   const orderMoreReports = () => {
-    if (history.reachedEnd) return;
-    setHistory((prev) => {
+    if (reports.reachedEnd) return;
+    setReports((prev) => {
       const newData = clockHandler.getReports(
         prev.data.length + 1,
         REPORTS_ORDER_AMOUNT,
@@ -69,10 +67,9 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
   return (
     <ClockContext
       value={{
-        todayReport,
-        addCheckpoint,
         inActivity,
-        history,
+        reports,
+        addCheckpoint,
         orderMoreReports,
       }}
     >

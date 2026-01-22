@@ -12,7 +12,7 @@ const OBSERVER_HEIGHT = "12.5rem";
  * Componente que exibe o histórico de batidas
  */
 const History = () => {
-  const { history, orderMoreReports } = useClockContext();
+  const { reports, orderMoreReports } = useClockContext();
   const observerElement = useRef<HTMLDivElement>(null);
 
   const observer = useRef(
@@ -38,14 +38,14 @@ const History = () => {
   }, []);
 
   useEffect(() => {
-    if (history.reachedEnd) observer.current.disconnect();
-  }, [history.reachedEnd]);
+    if (reports.reachedEnd) observer.current.disconnect();
+  }, [reports.reachedEnd]);
 
   return (
     <section className={classes.container}>
       <h2 className={`neutral-dark text-large ${classes.title}`}>Histórico</h2>
       <ul className={classes.list}>
-        {history.data.map((report) => (
+        {reports.data.slice(1).map((report) => (
           <li key={report.timestampId}>
             <Report report={report} />
           </li>

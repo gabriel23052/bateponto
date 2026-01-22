@@ -101,7 +101,7 @@ export default class ClockHandler {
   }
 
   /**
-   * Adiciona uma nova batida em um relatório
+   * Adiciona uma nova batida em um relatório, retorna o relatório atualizado
    */
   public addCheckpoint(clockInDate: Date) {
     const timestampId = DateUtility.getReportIdFromDate(clockInDate);
@@ -110,10 +110,11 @@ export default class ClockHandler {
     const reportHandler = new ReportHandler(report);
     reportHandler.addCheckpoint(clockInDate);
     this.updateLocalStorage();
+    return ReportHandler.getViewFormat(report);
   }
 
   /**
-   * Retorna os relatórios dado um número de dias atrás e 
+   * Retorna os relatórios dado um número de dias atrás e
    * a quantidade
    */
   public getReports(daysOffset: number, amount: number): TReportView[] {

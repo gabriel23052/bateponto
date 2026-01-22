@@ -14,9 +14,9 @@ const BLOCK_TIMESTAMP_STORAGE_KEY = "blockedUntil";
  * Componente que exibe o botão de batida e o status
  */
 const ClockInSection = () => {
-  const { addCheckpoint, inActivity, todayReport } = useClockContext();
+  const { addCheckpoint, inActivity, reports } = useClockContext();
 
-  const [showNoticeModal, setShowNoticeModal] = useState(true);
+  const [showNoticeModal, setShowNoticeModal] = useState(false);
   const [blocked, setBlocked] = useState(() => {
     return (
       Number(localStorage.getItem(BLOCK_TIMESTAMP_STORAGE_KEY) || 0) >=
@@ -69,7 +69,7 @@ const ClockInSection = () => {
 
   const getLastCheckpoint = () => {
     const lastCheckpoint =
-      todayReport.checkpoints[todayReport.checkpoints.length - 1];
+      reports.data[0].checkpoints[reports.data[0].checkpoints.length - 1];
     return lastCheckpoint ? lastCheckpoint[0] : null;
   };
 
