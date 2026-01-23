@@ -107,55 +107,32 @@ export default class ClockHandler {
     const timestampId = DateUtility.getReportIdFromDate(clockInDate);
     const report = this.reportsMap.get(timestampId);
     if (!report) throw new Error("Report don't found: " + timestampId);
+    if (new Date().getTime() < clockInDate.getTime())
+      throw new Error("The report cannot be in the future");
     const reportHandler = new ReportHandler(report);
     reportHandler.addCheckpoint(clockInDate);
     this.updateLocalStorage();
-    return ReportHandler.getViewFormat(report);
+    return {
+      ...report,
+      checkpoints: [...report.checkpoints],
+    };
   }
 
   /**
    * Retorna os relatórios dado um número de dias atrás e
    * a quantidade
    */
-  public getReports(daysOffset: number, amount: number): TReportView[] {
+  public getReports(daysOffset: number, amount: number): TReport[] {
     const todayTimestampId = DateUtility.getReportIdFromDate(new Date());
-    const reports: TReportView[] = [];
+    const reports: TReport[] = [];
     for (let i = 0; i < amount; i++) {
       const targetTimestampId =
         todayTimestampId -
         (daysOffset * MILLISECONDS_IN_DAY + i * MILLISECONDS_IN_DAY);
       const report = this.reportsMap.get(targetTimestampId);
       if (!report) continue;
-      reports.push(ReportHandler.getViewFormat(report));
+      reports.push(report);
     }
     return reports;
-  }
-
-  /**
-   * Printa no console uma tabela com as datas dos
-   * relatórios armazenados
-   */
-  public logReportsDates() {
-    const reports: TReportKeyValue[] = Array.from(
-      this.reportsMap.entries(),
-    ).sort((a, b) => b[0] - a[0]);
-    const viewFormatReports = reports.map(([timestampId, rp]) => {
-      const reportDate = new Date(timestampId);
-      const viewDate = reportDate.toLocaleDateString("pt-BR");
-      const viewCheckpoints =
-        rp.checkpoints
-          .map((ts) => {
-            const date = new Date(ts);
-            return `${date.getHours().toString().padStart(2, "0")}:${date
-              .getMinutes()
-              .toString()
-              .padStart(2, "0")}`;
-          })
-          .join(" - ") +
-        " --> " +
-        DateUtility.viewTimeFromMilliseconds(rp.sum);
-      return [viewDate, viewCheckpoints];
-    });
-    console.table(viewFormatReports);
   }
 }

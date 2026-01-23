@@ -1,13 +1,14 @@
 import ReportDate from "./ReportDate";
 import CheckpointList from "./CheckpointList";
+import ReportSum from "./ReportSum";
+import DateUtility from "../utils/DateUtility";
 
 import { useClockContext } from "../contexts/ClockContext";
 
 import classes from "./Report.module.css";
-import ReportSum from "./ReportSum";
 
 type Props = {
-  report: TReportView;
+  report: TReport;
   disableAlert?: boolean;
 };
 
@@ -23,7 +24,7 @@ const Report = ({ report, disableAlert }: Props) => {
         inActivity ? classes.activity : ""
       }`}
     >
-      <ReportDate date={report.date} />
+      <ReportDate date={DateUtility.getReportViewDate(report.timestampId)} />
       {report.checkpoints.length === 0 ? (
         <p className={`neutral-lightgray text-default ${classes.noActivity}`}>
           Sem atividade
@@ -32,8 +33,8 @@ const Report = ({ report, disableAlert }: Props) => {
         <>
           <CheckpointList checkpoints={report.checkpoints} />
           <ReportSum
-            sum={report.sum}
-            missingCheckpoint={report.missingCheckpoint}
+            sum={DateUtility.getSumView(report.sum)}
+            missingCheckpoint={report.checkpoints.length % 2 !== 0}
             disableAlert={disableAlert}
             inActivity={inActivity}
           />

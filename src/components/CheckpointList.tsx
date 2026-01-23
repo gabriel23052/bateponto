@@ -3,7 +3,7 @@ import Checkpoint from "./Checkpoint";
 import classes from "./CheckpointList.module.css";
 
 type Props = {
-  checkpoints: string[][];
+  checkpoints: number[];
 };
 
 /**
@@ -11,12 +11,12 @@ type Props = {
  */
 const CheckpointList = ({ checkpoints }: Props) => {
   return (
-    <ul className={`${classes.container}`}>
-      {checkpoints.map((timestamp) => (
+    <ul className={classes.container}>
+      {Array.from({ length: Math.ceil(checkpoints.length / 2) }, (_, i) => (
         <Checkpoint
-          start={timestamp[0]}
-          end={timestamp[1]}
-          key={timestamp[0]}
+          start={checkpoints[i * 2]}
+          end={checkpoints[i * 2 + 1]}
+          key={checkpoints[i * 2]}
         />
       ))}
     </ul>

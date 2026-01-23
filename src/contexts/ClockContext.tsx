@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 import ClockHandler from "../utils/ClockHandler";
 
@@ -13,7 +8,7 @@ type ProviderProps = {
 
 type ContextValue = {
   inActivity: boolean;
-  reports: { reachedEnd: boolean; data: TReportView[] };
+  reports: { reachedEnd: boolean; data: TReport[] };
   addCheckpoint: () => void;
   orderMoreReports: () => void;
 };
@@ -35,18 +30,19 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     return { reachedEnd, data };
   });
 
-  const [inActivity, setInActivity] = useState(reports.data[0].missingCheckpoint);
+  const [inActivity, setInActivity] = useState(
+    reports.data[0].checkpoints.length % 2 !== 0,
+  );
 
   const addCheckpoint = () => {
     const updatedReport = clockHandler.addCheckpoint(new Date());
-    setInActivity(updatedReport.missingCheckpoint);
-    setReports((prev) => {
-      const index = prev.data.findIndex(
-        (rp) => rp.timestampId === updatedReport.timestampId,
-      );
-      prev.data[index] = updatedReport;
-      return prev;
-    });
+    setInActivity(updatedReport.checkpoints.length % 2 !== 0);
+    setReports((prev) => ({
+      ...prev,
+      data: prev.data.map((rp) =>
+        rp.timestampId === updatedReport.timestampId ? updatedReport : rp,
+      ),
+    }));
   };
 
   const orderMoreReports = () => {

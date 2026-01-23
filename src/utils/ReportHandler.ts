@@ -1,5 +1,3 @@
-import DateUtility from "./DateUtility";
-
 /**
  * Manipula reports de forma individual
  */
@@ -36,32 +34,5 @@ export default class ReportHandler {
       }
     }
     this.report.sum = sum;
-  }
-
-  /**
-   * Retorna um relatório na forma de visualização a partir de
-   * um relatório comum
-   */
-  public static getViewFormat(report: TReport): TReportView {
-    const date = DateUtility.getReportViewDate(new Date(report.timestampId));
-    const checkpoints: string[][] = [];
-    for (let i = 0; i < report.checkpoints.length; i += 2) {
-      const viewCheckpoint = [
-        DateUtility.viewTimeFromTimestamp(report.checkpoints[i]),
-      ];
-      if (report.checkpoints[i + 1]) {
-        viewCheckpoint.push(
-          DateUtility.viewTimeFromTimestamp(report.checkpoints[i + 1]),
-        );
-      }
-      checkpoints.push(viewCheckpoint);
-    }
-    return {
-      timestampId: report.timestampId,
-      date,
-      checkpoints,
-      missingCheckpoint: report.checkpoints.length % 2 !== 0,
-      sum: DateUtility.viewTimeFromMilliseconds(report.sum),
-    };
   }
 }

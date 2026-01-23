@@ -47,17 +47,33 @@ export default class DateUtility {
    * Retorna a data em forma de visualização amigável para utilizar
    * nos relatórios
    */
-  public static getReportViewDate(date: Date): TReportViewDate {
+  public static getReportViewDate(timestampId: number): TReportViewDate {
     const todayDate = new Date();
-    const today =
-      todayDate.getDate() === date.getDate() &&
-      todayDate.getMonth() === date.getMonth() &&
-      todayDate.getFullYear() === date.getFullYear();
-    const shortDate = `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}`;
+    const date = new Date(timestampId);
+    todayDate.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     return {
       dayOfWeek: SHORT_DAYS_OF_WEEK[date.getDay()],
-      today,
-      shortDate,
+      today: date.getTime() - todayDate.getTime() === 0,
+      shortDate: `${day}/${month}`,
     };
+  }
+
+  public static getSumView(milliseconds: number) {
+    const hr = Math.floor(milliseconds / MILLISECONDS_IN_HOUR);
+    const min = Math.floor(
+      (milliseconds - hr * MILLISECONDS_IN_HOUR) / MILLISECONDS_IN_MINUTE,
+    );
+    return (
+      hr.toString().padStart(2, "0") + ":" + min.toString().padStart(2, "0")
+    );
+  }
+
+  public static getTimeView(timestamp: number) {
+    return new Date(timestamp).toLocaleTimeString("pt-br", {
+      timeStyle: "short",
+    });
   }
 }

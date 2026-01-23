@@ -1,18 +1,24 @@
 import classes from "./Checkpoint.module.css";
 
 type Props = {
-  start: string;
-  end?: string;
+  start: number;
+  end?: number;
 };
 
 /**
  * Exibe um período
  */
 const Checkpoint = ({ start, end }: Props) => {
+  const getTimeString = (date: number) => {
+    return new Date(date).toLocaleTimeString("pt-br", {
+      timeStyle: "short",
+    });
+  };
+
   return (
     <li className={`neutral-dark text-default-m ${classes.container}`}>
-      <time dateTime={start}>{start}</time>
-      {end && <time dateTime={end}>{end}</time>}
+      <time dateTime={getTimeString(start)}>{getTimeString(start)}</time>
+      {end && <time dateTime={getTimeString(end)}>{getTimeString(end)}</time>}
     </li>
   );
 };

@@ -8,14 +8,6 @@ type TReportViewDate = {
   dayOfWeek: TShortDayOfWeek;
 };
 
-type TReportView = {
-  timestampId: number;
-  date: TReportViewDate;
-  checkpoints: string[][];
-  sum: string;
-  missingCheckpoint: boolean;
-};
-
 type TReport = {
   timestampId: number;
   checkpoints: number[];

@@ -1,198 +1,121 @@
+import { beforeEach, describe, expect, it } from "vitest";
+
 import ClockHandler from "../src/utils/ClockHandler";
-import DateUtility from "../src/utils/DateUtility";
-import { describe, expect, it } from "vitest";
+import { createOutOfRangeReports } from "./helpers";
 
 const MILLISECONDS_IN_DAY = 86_400_000;
-const REPORTS_STORAGE_KEY = "reports";
-
-type TestReport = {
-  timestampId: number;
-  checkpoints: string[];
-  sum: string;
-};
-
-const parseTestReport = (testReport: TestReport): TReport => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return {
-    timestampId: testReport.timestampId,
-    checkpoints: testReport.checkpoints.map((ch) => {
-      const [hour, minute] = ch.split(":").map(Number);
-      today.setHours(hour);
-      today.setMinutes(minute);
-      return today.getTime();
-    }),
-    sum: (() => {
-      const [hour, minute] = testReport.sum.split(":").map(Number);
-      return hour * 60 * 60 * 1000 + minute * 60 * 1000;
-    })(),
-  };
-};
-
-const testReport = parseTestReport({
-  timestampId: DateUtility.getReportIdFromDate(new Date()),
-  checkpoints: [
-    "09:00",
-    "09:20",
-    "10:16",
-    "11:40",
-    "15:25",
-    "19:49",
-    "19:55",
-    "20:00",
-  ],
-  sum: "06:13",
-});
-
-const getReportsFromLocalStorage = () => {
-  const reports = localStorage.getItem(REPORTS_STORAGE_KEY);
-  if (reports === null) throw new Error("Reports don't found in localStorage");
-  let parsedReports: TReportKeyValue[];
-  try {
-    parsedReports = JSON.parse(reports);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
-    throw new Error("Invalid JSON in localStorage");
-  }
-  return parsedReports;
-};
+const REPORTS_RANGE_DAYS = 30;
 
 describe("ClockHandler", () => {
-  it("Instância a classe e cria os relatórios vazios", () => {
+  beforeEach(() => {
     localStorage.clear();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const clockHandler = new ClockHandler();
-    expect(localStorage.getItem(REPORTS_STORAGE_KEY)).toBeDefined();
   });
 
-  it("Retorna erro quando localStorage contém JSON inválido", () => {
-    localStorage.clear();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    localStorage.setItem(REPORTS_STORAGE_KEY, "test");
-    expect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const instance = new ClockHandler();
-    }).toThrow("Invalid JSON in localStorage");
+  describe("constructor", () => {
+    it(`Cria ${REPORTS_RANGE_DAYS} relatórios vazios caso não ainda não existam`, () => {
+      const clockHandler = new ClockHandler();
+      const reports = clockHandler.getReports(0, 30);
+      expect(reports).toHaveLength(30);
+    });
+
+    it(`Cria os ${REPORTS_RANGE_DAYS} relatórios com ID's e objetos corretos`, () => {
+      const clockHandler = new ClockHandler();
+      const reports = clockHandler.getReports(0, 30);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
+        expect(reports[i]).toEqual({
+          timestampId: today.getTime() - i * MILLISECONDS_IN_DAY,
+          checkpoints: [],
+          sum: 0,
+        });
+      }
+    });
+
+    it(`Corrige o período da forma correta`, () => {
+      const DAYS_AGO = 4;
+      createOutOfRangeReports(DAYS_AGO, REPORTS_RANGE_DAYS, "reports");
+      const clockHandler = new ClockHandler();
+      const reports = clockHandler.getReports(0, 30);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
+        expect(reports[i]).toEqual({
+          timestampId: today.getTime() - i * MILLISECONDS_IN_DAY,
+          checkpoints: [],
+          sum: 0,
+        });
+      }
+    });
   });
 
-  it("Atualiza o período de relatórios simulando 2 dias inativos", () => {
-    localStorage.clear();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const clockHandler = new ClockHandler();
-    const reports: TReportKeyValue[] = getReportsFromLocalStorage();
-    const reportsCopy = structuredClone(reports);
-    for (let i = 0; i < reports.length; i++) {
-      reports[i][0] -= MILLISECONDS_IN_DAY * 2;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newClockHandler = new ClockHandler();
-    const newReports: TReportKeyValue[] = getReportsFromLocalStorage();
-    expect(newReports).toEqual(reportsCopy);
-  });
+  describe("addCheckpoint", () => {
+    it("Adiciona batida no dia corrente", () => {
+      const clockHandler = new ClockHandler();
+      const now = new Date();
+      clockHandler.addCheckpoint(now);
+      expect(clockHandler.getReports(0, 1)).toHaveLength(1);
+      expect(clockHandler.getReports(0, 1)[0].checkpoints).toEqual([
+        now.getTime(),
+      ]);
+    });
 
-  it("Atualiza o período de relatórios simulando 80 dias inativos", () => {
-    localStorage.clear();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const clockHandler = new ClockHandler();
-    const reports: TReportKeyValue[] = getReportsFromLocalStorage();
-    const reportsCopy = structuredClone(reports);
-    for (let i = 0; i < reports.length; i++) {
-      reports[i][0] -= MILLISECONDS_IN_DAY * 80;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newClockHandler = new ClockHandler();
-    const newReports: TReportKeyValue[] = getReportsFromLocalStorage();
-    expect(newReports).toEqual(reportsCopy);
-  });
+    it("Adiciona batida dez dias atrás", () => {
+      const clockHandler = new ClockHandler();
+      const now = new Date();
+      const tenDaysAgo = new Date(now.getTime() - 10 * MILLISECONDS_IN_DAY);
+      clockHandler.addCheckpoint(tenDaysAgo);
+      expect(clockHandler.getReports(10, 1)).toHaveLength(1);
+      expect(clockHandler.getReports(10, 1)[0].checkpoints).toEqual([
+        tenDaysAgo.getTime(),
+      ]);
+    });
 
-  it("Adiciona algumas batidas no localStorage", () => {
-    localStorage.clear();
-    const today = new Date();
-    const clockHandler = new ClockHandler();
-    today.setMilliseconds(0);
-    today.setSeconds(0);
-    testReport.checkpoints.forEach((ch) =>
-      clockHandler.addCheckpoint(new Date(ch)),
-    );
-    const reportsFromLocalStorage = getReportsFromLocalStorage();
-    const timestampId = DateUtility.getReportIdFromDate(today);
-    const targetReport = (
-      reportsFromLocalStorage.find(
-        (report) => report[0] === timestampId,
-      ) as TReportKeyValue
-    )[1];
-    expect(targetReport).toEqual(testReport);
-  });
+    it("Falha ao adicionar batida fora do período", () => {
+      const clockHandler = new ClockHandler();
+      const future = new Date();
+      future.setDate(future.getDate() + 5);
+      expect(() => {
+        clockHandler.addCheckpoint(future);
+      }).toThrow("Report don't found");
+    });
 
-  it("Adiciona mais uma batida para restar um número impár de batidas", () => {
-    const clockHandler = new ClockHandler();
-    const newCheckpoint = new Date();
-    newCheckpoint.setHours(21, 25, 0, 0);
-    clockHandler.addCheckpoint(newCheckpoint);
-    testReport.checkpoints.push(newCheckpoint.getTime());
-    const reportsFromLocalStorage = getReportsFromLocalStorage();
-    const targetReport = (
-      reportsFromLocalStorage.find(
-        (report) =>
-          report[0] === DateUtility.getReportIdFromDate(newCheckpoint),
-      ) as TReportKeyValue
-    )[1];
-    expect(targetReport).toEqual(testReport);
-  });
+    it("Falha ao adicionar no futuro", () => {
+      const clockHandler = new ClockHandler();
+      const future = new Date();
+      future.setSeconds(future.getSeconds() + 5);
+      expect(() => {
+        clockHandler.addCheckpoint(future);
+      }).toThrow("The report cannot be in the future");
+    });
 
-  it("Retorna erro ao tentar adicionar batida em 2010", () => {
-    const clockHandler = new ClockHandler();
-    const outOfRangeDate = new Date(2010, 0, 1);
-    expect(() => {
-      clockHandler.addCheckpoint(outOfRangeDate);
-    }).toThrowError("Report don't found: " + outOfRangeDate.getTime());
-  });
+    it("Falha ao adicionar batida repetida", () => {
+      const clockHandler = new ClockHandler();
+      const now = new Date();
+      clockHandler.addCheckpoint(now);
+      expect(() => {
+        clockHandler.addCheckpoint(now);
+      }).toThrow("Checkpoint already exists in the report");
+    });
 
-  it("Busca o relatório do dia corrente", () => {
-    const clockHandler = new ClockHandler();
-    const today = new Date();
-    const EXPECTED: TReportView = {
-      timestampId: DateUtility.getReportIdFromDate(new Date()),
-      date: DateUtility.getReportViewDate(today),
-      checkpoints: [
-        ["09:00", "09:20"],
-        ["10:16", "11:40"],
-        ["15:25", "19:49"],
-        ["19:55", "20:00"],
-        ["21:25"],
-      ],
-      sum: "06:13",
-      missingCheckpoint: true,
-    };
-    expect(clockHandler.getReports(0, 1)[0]).toEqual(EXPECTED);
-  });
-
-  it("Busca os relatórios entre 2 dias atrás e 12 dias atrás", () => {
-    const clockHandler = new ClockHandler();
-    expect(clockHandler.getReports(2, 10)).toHaveLength(10);
-  });
-
-  it("Busca 10 relatórios de 25 dias atrás", () => {
-    const clockHandler = new ClockHandler();
-    expect(clockHandler.getReports(25, 10)).toHaveLength(5);
-  });
-
-  it("Adiciona batida 15 dias atrás e efetua a busca", () => {
-    const clockHandler = new ClockHandler();
-    const oldReportTimestampId =
-      DateUtility.getReportIdFromDate(new Date()) - MILLISECONDS_IN_DAY * 15;
-    const oldCheckpoint = new Date(oldReportTimestampId);
-    oldCheckpoint.setHours(10, 30);
-    clockHandler.addCheckpoint(oldCheckpoint);
-    oldCheckpoint.setHours(19, 15);
-    clockHandler.addCheckpoint(oldCheckpoint);
-    const EXPECTED: TReportView = {
-      timestampId: DateUtility.getReportIdFromDate(oldCheckpoint),
-      date: DateUtility.getReportViewDate(oldCheckpoint),
-      checkpoints: [["10:30", "19:15"]],
-      sum: "08:45",
-      missingCheckpoint: false,
-    };
-    expect(clockHandler.getReports(15, 1)[0]).toEqual(EXPECTED);
+    it("Soma os períodos corretamente", () => {
+      const clockHandler = new ClockHandler();
+      const yesterday = new Date(new Date().getTime() - MILLISECONDS_IN_DAY);
+      yesterday.setHours(2, 52, 12, 65); // 10332065ms
+      clockHandler.addCheckpoint(yesterday);
+      yesterday.setHours(3, 6, 52, 747); // 11212747ms
+      clockHandler.addCheckpoint(yesterday);
+      yesterday.setHours(12, 43, 32, 858); // 45812858ms
+      clockHandler.addCheckpoint(yesterday);
+      yesterday.setHours(15, 29, 4, 472); // 55744472ms
+      clockHandler.addCheckpoint(yesterday);
+      // 11212747ms - 10332065ms = 880682ms
+      // 45812858ms - 55744472ms = 9931614ms
+      // 880682ms + 9931614ms = 10812296ms
+      const report = clockHandler.getReports(1, 1);
+      expect(report).toHaveLength(1);
+      expect(report[0].checkpoints).toHaveLength(4);
+      expect(report[0].sum).toBe(10_812_296);
+    });
   });
 });
