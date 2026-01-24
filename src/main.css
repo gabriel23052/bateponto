@@ -241,3 +241,9 @@ html {
   line-height: 4.5rem /* 72px */;
   font-weight: 500;
 }
+
+.text-small {
+  font-family: var(--default);
+  font-size: 0.875rem; /* 14px */
+  line-height: var(--px20);
+}

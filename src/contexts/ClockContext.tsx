@@ -9,8 +9,11 @@ type ProviderProps = {
 type ContextValue = {
   inActivity: boolean;
   reports: { reachedEnd: boolean; data: TReport[] };
+  inEditionReport: TReport | null;
   addCheckpoint: () => void;
   orderMoreReports: () => void;
+  editReport: (timestampId: number) => void;
+  cleanEditReport: () => void;
 };
 
 const REPORTS_ORDER_AMOUNT = 5;
@@ -33,6 +36,8 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
   const [inActivity, setInActivity] = useState(
     reports.data[0].checkpoints.length % 2 !== 0,
   );
+
+  const [inEditionReport, setInEditionReport] = useState<TReport | null>(null);
 
   const addCheckpoint = () => {
     const updatedReport = clockHandler.addCheckpoint(new Date());
@@ -60,12 +65,27 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     });
   };
 
+  const editReport = (timestampId: number) => {
+    setInEditionReport(() => {
+      const reportToEdit = reports.data.find(
+        (rp) => rp.timestampId === timestampId,
+      );
+      if (!reportToEdit) return null;
+      return { ...reportToEdit, checkpoints: [...reportToEdit.checkpoints] };
+    });
+  };
+
+  const cleanEditReport = () => setInEditionReport(null);
+
   return (
     <ClockContext
       value={{
         inActivity,
         reports,
         addCheckpoint,
+        inEditionReport,
+        editReport,
+        cleanEditReport,
         orderMoreReports,
       }}
     >

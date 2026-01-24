@@ -16,13 +16,16 @@ type Props = {
  * Componente que exibe o histórico de períodos de um determinado dia
  */
 const Report = ({ report, disableAlert }: Props) => {
-  const { inActivity } = useClockContext();
+  const { inActivity, editReport } = useClockContext();
 
   return (
     <button
       className={`bg-neutral-white ${classes.button} ${
         inActivity ? classes.activity : ""
       }`}
+      onClick={() => {
+        editReport(report.timestampId);
+      }}
     >
       <ReportDate date={DateUtility.getReportViewDate(report.timestampId)} />
       {report.checkpoints.length === 0 ? (
@@ -36,7 +39,6 @@ const Report = ({ report, disableAlert }: Props) => {
             sum={DateUtility.getSumView(report.sum)}
             missingCheckpoint={report.checkpoints.length % 2 !== 0}
             disableAlert={disableAlert}
-            inActivity={inActivity}
           />
         </>
       )}

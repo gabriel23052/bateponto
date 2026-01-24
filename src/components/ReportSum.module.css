@@ -1,6 +1,6 @@
 .container {
   padding-left: var(--px4);
-  width: 3.75rem /* 60px */
+  width: 3.75rem; /* 60px */
 }
 
 .container svg {
@@ -21,4 +21,8 @@
 
 .alert {
   translate: 0 2px;
+}
+
+.container p {
+  text-align: center;
 }

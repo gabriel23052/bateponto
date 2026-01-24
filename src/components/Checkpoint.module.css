@@ -1,9 +1,47 @@
 .container {
+  height: var(--px64);
   display: flex;
   flex-direction: column;
-  height: var(--px64);
-  gap: var(--px16);
+  align-items: center;
   background-image: url("../assets/icons/timestamp-arrow.svg");
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.container time:first-of-type {
+  margin-bottom: var(--px16);
+}
+.container time:last-of-type {
+  margin-bottom: var(--px4);
+}
+
+.container button {
+  padding: var(--px4);
+  line-height: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 300ms background-color;
+}
+.container button:hover {
+  background-color: var(--negative-feedback);
+}
+.container button:focus {
+  outline: 2px solid var(--negative-feedback);
+}
+.container button:first-of-type {
+  margin-bottom: var(--px4);
+}
+
+.container button svg {
+  width: var(--px12);
+  height: var(--px12);
+  color: var(--negative-feedback);
+  transition: 300ms color;
+}
+.container button:hover svg {
+  color: var(--neutral-white);
+}
+
+.container.editMode {
+  height: 7rem;
 }
