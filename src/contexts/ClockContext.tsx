@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 import ClockHandler from "../utils/ClockHandler";
 
@@ -9,11 +15,9 @@ type ProviderProps = {
 type ContextValue = {
   inActivity: boolean;
   reports: { reachedEnd: boolean; data: TReport[] };
-  inEditionReport: TReport | null;
   addCheckpoint: () => void;
   orderMoreReports: () => void;
-  editReport: (timestampId: number) => void;
-  cleanEditReport: () => void;
+  replaceReport: (report: TReport) => void;
 };
 
 const REPORTS_ORDER_AMOUNT = 5;
@@ -33,21 +37,32 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     return { reachedEnd, data };
   });
 
-  const [inActivity, setInActivity] = useState(
-    reports.data[0].checkpoints.length % 2 !== 0,
+  const inActivity = useMemo(
+    () => reports.data[0].checkpoints.length % 2 !== 0,
+    [reports.data],
   );
-
-  const [inEditionReport, setInEditionReport] = useState<TReport | null>(null);
 
   const addCheckpoint = () => {
     const updatedReport = clockHandler.addCheckpoint(new Date());
-    setInActivity(updatedReport.checkpoints.length % 2 !== 0);
     setReports((prev) => ({
       ...prev,
       data: prev.data.map((rp) =>
         rp.timestampId === updatedReport.timestampId ? updatedReport : rp,
       ),
     }));
+  };
+
+  const replaceReport = (report: TReport) => {
+    clockHandler.replaceReport(report);
+    setReports((prev) => {
+      return {
+        reachedEnd: prev.reachedEnd,
+        data: prev.data.map((rp) => {
+          if (rp.timestampId === report.timestampId) return { ...report };
+          return rp;
+        }),
+      };
+    });
   };
 
   const orderMoreReports = () => {
@@ -65,28 +80,14 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     });
   };
 
-  const editReport = (timestampId: number) => {
-    setInEditionReport(() => {
-      const reportToEdit = reports.data.find(
-        (rp) => rp.timestampId === timestampId,
-      );
-      if (!reportToEdit) return null;
-      return { ...reportToEdit, checkpoints: [...reportToEdit.checkpoints] };
-    });
-  };
-
-  const cleanEditReport = () => setInEditionReport(null);
-
   return (
     <ClockContext
       value={{
         inActivity,
         reports,
         addCheckpoint,
-        inEditionReport,
-        editReport,
-        cleanEditReport,
         orderMoreReports,
+        replaceReport,
       }}
     >
       {children}

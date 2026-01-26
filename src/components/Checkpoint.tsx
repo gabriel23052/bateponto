@@ -1,5 +1,7 @@
 import EraseIcon from "../assets/icons/erase.svg?react";
 
+import { useEditContext } from "../contexts/EditContext";
+
 import classes from "./Checkpoint.module.css";
 
 type Props = {
@@ -12,6 +14,8 @@ type Props = {
  * Exibe um período
  */
 const Checkpoint = ({ start, end, editMode }: Props) => {
+  const { eraseCheckpoint } = useEditContext();
+
   const getTimeString = (date: number) => {
     return new Date(date).toLocaleTimeString("pt-br", {
       timeStyle: "short",
@@ -23,7 +27,11 @@ const Checkpoint = ({ start, end, editMode }: Props) => {
       className={`neutral-dark text-default-m ${classes.container} ${editMode ? classes.editMode : ""}`}
     >
       {editMode && (
-        <button>
+        <button
+          onClick={() => {
+            eraseCheckpoint(start);
+          }}
+        >
           <EraseIcon width={12} height={12} />
         </button>
       )}
@@ -32,7 +40,11 @@ const Checkpoint = ({ start, end, editMode }: Props) => {
         <>
           <time dateTime={getTimeString(end)}>{getTimeString(end)}</time>
           {editMode && (
-            <button>
+            <button
+              onClick={() => {
+                eraseCheckpoint(end);
+              }}
+            >
               <EraseIcon width={12} height={12} />
             </button>
           )}

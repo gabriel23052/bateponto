@@ -119,6 +119,14 @@ export default class ClockHandler {
   }
 
   /**
+   * Substitui um relatório no mapa e atualiza o localStorage
+   */
+  public replaceReport(report: TReport) {
+    this.reportsMap.set(report.timestampId, report);
+    this.updateLocalStorage();
+  }
+
+  /**
    * Retorna os relatórios dado um número de dias atrás e
    * a quantidade
    */

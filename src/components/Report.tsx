@@ -4,6 +4,7 @@ import ReportSum from "./ReportSum";
 import DateUtility from "../utils/DateUtility";
 
 import { useClockContext } from "../contexts/ClockContext";
+import { useEditContext } from "../contexts/EditContext";
 
 import classes from "./Report.module.css";
 
@@ -16,7 +17,8 @@ type Props = {
  * Componente que exibe o histórico de períodos de um determinado dia
  */
 const Report = ({ report, disableAlert }: Props) => {
-  const { inActivity, editReport } = useClockContext();
+  const { inActivity } = useClockContext();
+  const { editReport } = useEditContext();
 
   return (
     <button
@@ -24,7 +26,7 @@ const Report = ({ report, disableAlert }: Props) => {
         inActivity ? classes.activity : ""
       }`}
       onClick={() => {
-        editReport(report.timestampId);
+        editReport(report);
       }}
     >
       <ReportDate date={DateUtility.getReportViewDate(report.timestampId)} />
