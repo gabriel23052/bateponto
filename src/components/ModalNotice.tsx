@@ -10,7 +10,7 @@ type Props = {
 
 const ModalNotice = ({ children, closeModal }: Props) => {
   return (
-    <ModalBase closeModal={closeModal}>
+    <ModalBase closeModal={closeModal} zIndex={10}>
       <section className={`bg-neutral-white ${classes.container}`}>
         <p className="neutral-dark">{children}</p>
         <PrimaryButton onClick={closeModal}>OK</PrimaryButton>

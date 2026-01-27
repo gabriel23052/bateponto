@@ -3,7 +3,7 @@
   border-radius: 0 0 var(--px16) var(--px16);
 }
 
-.edition {
+.reportInfo {
   display: flex;
   gap: var(--px12);
   align-items: center;
@@ -11,58 +11,8 @@
 }
 
 .controls {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: var(--px16) var(--px8);
-
-}
-
-.controls p {
   display: flex;
-  align-items: center;
-  gap: var(--px8);
-  flex: 1;
-
-  @media (max-width: 550px) {
-    grid-column: 1/-1;
-  }
-}
-
-.controls p::before {
-  content: "";
-  width: var(--px16);
-  height: var(--px16);
-  display: inline-block;
-  background-image: url("../assets/icons/notice.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-}
-
-.trashButton {
-  align-self: stretch;
-  padding-inline: 0.625rem; /* 10px */
-  line-height: 0;
-  border-radius: 8px;
-  corner-shape: squircle;
-  cursor: pointer;
-  transition: 300ms scale;
-
-  @media (max-width: 550px) {
-    grid-column: 2;
-  }
-}
-.trashButton:hover {
-  scale: 1.05;
-}
-.trashButton:focus {
-  outline: 2px solid var(--negative-feedback);
-  outline-offset: 2px;
-}
-
-.trashButton svg {
-  width: var(--px16);
-  height: 1.125rem; /* 18px */
+  gap: var(--px12);
+  justify-content: end;
 }
 

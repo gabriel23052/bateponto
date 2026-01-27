@@ -1,0 +1,56 @@
+.container {
+  width: min-content;
+  display: flex;
+  border: 1px solid var(--neutral-light);
+  border-radius: 8px;
+  transition: 300ms background-color;
+}
+.container:hover {
+  background-color: var(--neutral-xlight);
+}
+.container:focus-within {
+  outline: 2px solid var(--neutral-dark);
+  outline-offset: 2px;
+}
+
+.input {
+  padding-left: var(--px8);
+  padding-block: var(--px4);
+  border-right: var(--px8) solid var(--neutral-xlight);
+  border-radius: 8px 0 0 8px;
+  cursor: text;
+  transition:
+    300ms background-color,
+    300ms border-color;
+}
+.input:hover {
+  background-color: var(--neutral-white);
+  border-color: var(--neutral-white);
+}
+
+.button {
+  padding-inline: var(--px8);
+  border-radius: 0 8px 8px 0;
+  line-height: 0px;
+  cursor: pointer;
+  transition: 300ms background-color;
+}
+.button:hover {
+  background-color: var(--neutral-black);
+}
+.button:is(:disabled:hover, :disabled) {
+  background-color: var(--neutral-light);
+  cursor: not-allowed;
+}
+
+.button svg {
+  color: var(--neutral-white);
+  transition: 300ms scale;
+}
+.button:is(:disabled:hover, :disabled:focus, :disabled) svg {
+  color: var(--neutral-lightgray);
+  scale: 1;
+}
+.button:focus svg {
+  scale: 1.05;
+}

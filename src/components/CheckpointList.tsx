@@ -1,7 +1,5 @@
 import Checkpoint from "./Checkpoint";
 
-import AddIcon from "../assets/icons/add.svg?react";
-
 import classes from "./CheckpointList.module.css";
 
 type Props = {
@@ -23,11 +21,6 @@ const CheckpointList = ({ checkpoints, editMode }: Props) => {
           key={checkpoints[i * 2]}
         />
       ))}
-      {editMode && (
-        <button className={`${classes.editButton}`}>
-          <AddIcon width={18} height={18} />
-        </button>
-      )}
     </ul>
   );
 };

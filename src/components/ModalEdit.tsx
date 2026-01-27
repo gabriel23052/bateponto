@@ -3,21 +3,20 @@ import CheckpointList from "./CheckpointList";
 import ReportSum from "./ReportSum";
 import ModalWindow from "./ModalWindow";
 import PrimaryButton from "./PrimaryButton";
+import CheckpointInput from "./CheckpointInput";
 
 import { useEditContext } from "../contexts/EditContext";
-import DateUtility from "../utils/DateUtility";
 
-import TrashIcon from "../assets/icons/trash.svg?react";
+import DateUtility from "../utils/DateUtility";
 
 import classes from "./ModalEdit.module.css";
 
 const ModalEdit = () => {
-  const { inEditionReport, cleanEditReport, eraseAllCheckpoints, save } =
-    useEditContext();
+  const { inEditionReport, cleanEditReport, save } = useEditContext();
 
   if (!inEditionReport) return null;
   return (
-    <ModalBase closeModal={cleanEditReport}>
+    <ModalBase closeModal={cleanEditReport} zIndex={1}>
       <ModalWindow
         title={new Date(inEditionReport.timestampId).toLocaleDateString(
           "pt-br",
@@ -25,7 +24,7 @@ const ModalEdit = () => {
         closeModal={cleanEditReport}
       >
         <div className={`bg-neutral-white ${classes.container}`}>
-          <div className={classes.edition}>
+          <div className={classes.reportInfo}>
             <CheckpointList
               checkpoints={inEditionReport.checkpoints}
               editMode={true}
@@ -36,16 +35,7 @@ const ModalEdit = () => {
             />
           </div>
           <div className={classes.controls}>
-            <p className="text-small neutral-lightgray">
-              Os horários são ordenados automáticamente
-            </p>
-            <button
-              className={`bg-negative-feedback ${classes.trashButton}`}
-              onClick={eraseAllCheckpoints}
-              title="Apagar todas as batidas"
-            >
-              <TrashIcon width={16} height={18} />
-            </button>
+            <CheckpointInput />
             <PrimaryButton onClick={save}>SALVAR</PrimaryButton>
           </div>
         </div>

@@ -10,8 +10,9 @@ type ContextValue = {
   inEditionReport: TReport | null;
   editReport: (report: TReport) => void;
   eraseCheckpoint: (timestampId: number) => void;
-  eraseAllCheckpoints: () => void;
   cleanEditReport: () => void;
+  validateNewCheckpoint: (checkpointDate: Date) => string | null;
+  addCheckpoint: (newCheckpointDate: Date) => void;
   save: () => void;
 };
 
@@ -45,14 +46,6 @@ const EditContextProvider = ({ children }: ProviderProps) => {
     updateSum();
   };
 
-  const eraseAllCheckpoints = () => {
-    setInEditionReport((prev) => {
-      if (!prev) return null;
-      return { ...prev, checkpoints: [] };
-    });
-    updateSum();
-  };
-
   const updateSum = () => {
     setInEditionReport((prev) => {
       if (!prev) return null;
@@ -66,13 +59,37 @@ const EditContextProvider = ({ children }: ProviderProps) => {
     });
   };
 
+  const validateNewCheckpoint = (checkpointDate: Date) => {
+    if (!inEditionReport) return null;
+    if (checkpointDate.getTime() > new Date().getTime())
+      return "A batida não pode ser no futuro";
+    if (inEditionReport.checkpoints.includes(checkpointDate.getTime()))
+      return "Já existe uma batida nesse horário";
+    return null;
+  };
+
+  const addCheckpoint = (newCheckpointDate: Date) => {
+    setInEditionReport((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        checkpoints: [...prev.checkpoints, newCheckpointDate.getTime()].sort(
+          (a, b) => a - b,
+        ),
+      };
+    });
+    updateSum();
+  };
+
   const save = () => {
     if (!inEditionReport) return;
     replaceReport(inEditionReport);
     setInEditionReport(null);
   };
 
-  const cleanEditReport = () => setInEditionReport(null);
+  const cleanEditReport = () => {
+    setInEditionReport(null);
+  };
 
   return (
     <EditContext
@@ -80,8 +97,9 @@ const EditContextProvider = ({ children }: ProviderProps) => {
         inEditionReport,
         editReport,
         eraseCheckpoint,
-        eraseAllCheckpoints,
         cleanEditReport,
+        validateNewCheckpoint,
+        addCheckpoint,
         save,
       }}
     >

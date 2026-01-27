@@ -4,11 +4,15 @@ import classes from "./ModalBase.module.css";
 
 type Props = PropsWithChildren & {
   closeModal: () => void;
+  zIndex: number;
 };
 
-const ModalBase = ({ children, closeModal }: Props) => {
-  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target instanceof HTMLDivElement && e.target.dataset.iscontainer) {
+const ModalBase = ({ children, closeModal, zIndex }: Props) => {
+  const handleClick = ({ target }: MouseEvent<HTMLDivElement>) => {
+    if (
+      target instanceof HTMLDivElement &&
+      target.style.zIndex === zIndex.toString()
+    ) {
       closeModal();
     }
   };
@@ -28,7 +32,7 @@ const ModalBase = ({ children, closeModal }: Props) => {
     <div
       className={classes.container}
       onClick={handleClick}
-      data-iscontainer="true"
+      style={{ zIndex }}
     >
       {children}
     </div>

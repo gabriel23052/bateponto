@@ -49,7 +49,7 @@ ul {
   --neutral-dark: #3a3a3a;
   --neutral-xdark: #1b1b1b;
   --neutral-black: #000000;
-  --negative-feedback: #ff6550;
+  --negative-feedback: #ff4343;
 
   --standby-gradient: linear-gradient(to right, #0084ff, #1ec0e4);
   --activity-gradient: linear-gradient(to right, #ff9500, #ffc014);
