@@ -3,3 +3,30 @@
   margin: 0 auto;
   padding: var(--px32) var(--px16);
 }
+
+.shortcutButton {
+  padding: var(--px8);
+  line-height: 0;
+  border-radius: var(--px16);
+  box-shadow: 0 0 4px rgb(0 0 0 / 15%);
+  transition:
+    300ms opacity,
+    300ms background-color;
+  cursor: pointer;
+  position: fixed;
+  bottom: var(--px32);
+  right: var(--px32);
+}
+.shortcutButton:hover {
+  background-color: var(--neutral-dark);
+}
+.shortcutButton:focus {
+  outline: 2px solid var(--neutral-darkgray);
+  outline-offset: 2px;
+}
+
+.shortcutButton svg {
+  width: var(--px32);
+  height: var(--px32);
+  color: var(--neutral-white);
+}

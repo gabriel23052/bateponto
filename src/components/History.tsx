@@ -6,7 +6,7 @@ import { useClockContext } from "../contexts/ClockContext";
 
 import classes from "./History.module.css";
 
-const OBSERVER_HEIGHT = "12.5rem";
+const OBSERVER_HEIGHT = "4rem";
 
 /**
  * Componente que exibe o histórico de batidas

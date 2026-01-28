@@ -22,15 +22,13 @@
     500ms background-position,
     300ms scale;
 }
-
-.button:hover {
+.button:is(:hover, :focus) {
   background-position: -2% 0;
   scale: 1.02;
 }
-.button.activity:hover {
+.button.activity:is(:hover, :focus) {
   background-position: -98% 0;
 }
-
 .button.activity {
   background-position: -100% 0;
 }
