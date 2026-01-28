@@ -19,7 +19,9 @@
   outline: 2px solid var(--neutral-lightgray);
 }
 
-.container button svg {
+.container svg {
+  width: var(--px16);
+  height: var(--px16);
   color: var(--neutral-darkgray);
   transition: 300ms color;
 }

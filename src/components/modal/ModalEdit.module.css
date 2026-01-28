@@ -25,13 +25,11 @@
   gap: var(--px4);
   margin-bottom: var(--px16);
 }
-.error::before {
-  content: "";
+
+.error svg {
+  color: var(--negative-feedback);
   width: var(--px16);
   height: var(--px16);
-  display: block;
-  background: url("../assets/icons/alert.svg");
-  background-size: 100%;
 }
 
 .controls {
@@ -71,10 +69,13 @@
   outline-offset: 2px;
 }
 
+.saveButton svg {
+  width: var(--px24);
+  height: var(--px24);
+  color: var(--neutral-light);
+}
 .saveButton:disabled svg {
   color: var(--neutral-lightgray);
 }
-.saveButton svg {
-  color: var(--neutral-light);
-}
+
 

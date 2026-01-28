@@ -1,14 +1,15 @@
 import { useState } from "react";
 
-import CheckpointList from "./CheckpointList";
-import ReportSum from "./ReportSum";
+import CheckpointList from "../checkpoint/CheckpointList";
+import ReportSum from "../report/ReportSum";
 import ModalTitleBar from "./ModalTitleBar";
-import CheckpointInput from "./CheckpointInput";
+import CheckpointInput from "../checkpoint/CheckpointInput";
 import Modal from "./Modal";
-import SaveIcon from "../assets/icons/save.svg?react";
+import SaveIcon from "../../assets/icons/save.svg?react";
+import AlertIcon from "../../assets/icons/alert.svg?react";
 
-import { useEditContext } from "../contexts/EditContext";
-import DateUtility from "../utils/DateUtility";
+import { useEditContext } from "../../contexts/EditContext";
+import DateUtility from "../../utils/DateUtility";
 
 import classes from "./ModalEdit.module.css";
 
@@ -46,6 +47,7 @@ const ModalEdit = () => {
       </div>
       {error && (
         <p className={`negative-feedback text-small ${classes.error}`}>
+          <AlertIcon width={16} height={16} />
           {error}
         </p>
       )}

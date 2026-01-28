@@ -1,7 +1,7 @@
-import ClockIcon from "../assets/icons/clock.svg?react";
-import AlertIcon from "../assets/icons/alert.svg?react";
+import ClockIcon from "../../assets/icons/clock.svg?react";
+import AlertIcon from "../../assets/icons/alert.svg?react";
 
-import { useClockContext } from "../contexts/ClockContext";
+import { useClockContext } from "../../contexts/ClockContext";
 
 import classes from "./ReportSum.module.css";
 
@@ -24,7 +24,7 @@ const ReportSum = ({ sum, missingCheckpoint, disableAlert }: Props) => {
           <AlertIcon width={20} height={20} className={classes.alert} />
         )}
         <ClockIcon
-          className={inActivity ? classes.activity : ""}
+          className={`${classes.clockIcon} ${inActivity ? classes.activity : ""}`}
           width={21}
           height={24}
         />

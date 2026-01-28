@@ -1,10 +1,10 @@
 import ReportDate from "./ReportDate";
-import CheckpointList from "./CheckpointList";
+import CheckpointList from "../checkpoint/CheckpointList";
 import ReportSum from "./ReportSum";
-import DateUtility from "../utils/DateUtility";
+import DateUtility from "../../utils/DateUtility";
 
-import { useClockContext } from "../contexts/ClockContext";
-import { useEditContext } from "../contexts/EditContext";
+import { useClockContext } from "../../contexts/ClockContext";
+import { useEditContext } from "../../contexts/EditContext";
 
 import classes from "./Report.module.css";
 

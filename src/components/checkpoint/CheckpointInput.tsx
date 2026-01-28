@@ -6,9 +6,9 @@ import {
   type SetStateAction,
 } from "react";
 
-import { useEditContext } from "../contexts/EditContext";
+import ClockAddIcon from "../../assets/icons/clock-add.svg?react";
 
-import ClockAddIcon from "../assets/icons/clockAdd.svg?react";
+import { useEditContext } from "../../contexts/EditContext";
 
 import classes from "./CheckpointInput.module.css";
 

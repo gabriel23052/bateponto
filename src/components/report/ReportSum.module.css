@@ -3,14 +3,6 @@
   width: 3.75rem; /* 60px */
 }
 
-.container svg {
-  color: var(--standby);
-  transition: 500ms color;
-}
-.container svg.activity {
-  color: var(--activity);
-}
-
 .container > div {
   display: flex;
   align-items: center;
@@ -19,8 +11,20 @@
   margin-bottom: var(--px4);
 }
 
+.clockIcon {
+  height: var(--px24);
+  color: var(--standby);
+  transition: 500ms color;
+}
+.clockIcon.activity {
+  color: var(--activity);
+}
+
 .alert {
+  width: var(--px20);
+  height: var(--px20);
   translate: 0 2px;
+  color: var(--negative-feedback);
 }
 
 .container p {

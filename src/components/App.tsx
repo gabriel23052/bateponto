@@ -1,17 +1,18 @@
+import { useEffect, useState } from "react";
+
 import Greeting from "./Greeting";
 import Clock from "./Clock";
 import DateText from "./DateText";
 import ClockInSection from "./ClockInSection";
 import TodayReport from "./TodayReport";
 import History from "./History";
-import ModalEditWrapper from "./ModalEditWrapper";
+import ModalEditWrapper from "./modal/ModalEditWrapper";
 import ArrowIcon from "../assets/icons/arrow.svg?react";
 
 import { ClockContextProvider } from "../contexts/ClockContext";
 import { EditContextProvider } from "../contexts/EditContext";
 
 import classes from "./App.module.css";
-import { useEffect, useState } from "react";
 
 const DEBOUNCE_DELAY = 200;
 const OFFSET_TO_SHOW_SHORTCUT = 200;

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import Report from "./Report";
+import Report from "./report/Report";
 
 import { useClockContext } from "../contexts/ClockContext";
 

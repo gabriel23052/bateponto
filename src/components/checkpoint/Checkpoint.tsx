@@ -1,6 +1,6 @@
-import EraseIcon from "../assets/icons/erase.svg?react";
+import EraseIcon from "../../assets/icons/erase.svg?react";
 
-import { useEditContext } from "../contexts/EditContext";
+import { useEditContext } from "../../contexts/EditContext";
 
 import classes from "./Checkpoint.module.css";
 

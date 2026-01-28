@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-import CloseIcon from "../assets/icons/close.svg?react";
+import CloseIcon from "../../assets/icons/close.svg?react";
 
 import classes from "./ModalTitleBar.module.css";
 

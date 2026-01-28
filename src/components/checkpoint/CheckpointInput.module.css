@@ -38,5 +38,8 @@
 }
 
 .button svg {
+  width: var(--px24);
+  height: var(--px24);
   color: var(--neutral-white);
 }
+

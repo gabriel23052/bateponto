@@ -1,12 +1,10 @@
-import { useClockContext } from "../contexts/ClockContext";
-
-import DateUtility from "../utils/DateUtility";
-
 import PlayIcon from "../assets/icons/play.svg?react";
 import StopIcon from "../assets/icons/stop.svg?react";
 
-import classes from "./ClockInSection.module.css";
+import { useClockContext } from "../contexts/ClockContext";
+import DateUtility from "../utils/DateUtility";
 
+import classes from "./ClockInSection.module.css";
 
 /**
  * Componente que exibe o botão de batida e o status

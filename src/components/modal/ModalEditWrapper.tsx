@@ -1,4 +1,4 @@
-import { useEditContext } from "../contexts/EditContext";
+import { useEditContext } from "../../contexts/EditContext";
 
 import ModalEdit from "./ModalEdit";
 
