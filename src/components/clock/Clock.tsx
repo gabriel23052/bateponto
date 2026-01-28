@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 import ClockDigit from "./ClockDigit";
 
-import usePageVisibility from "../hooks/usePageVisibility";
-import { useClockContext } from "../contexts/ClockContext";
+import usePageVisibility from "../../hooks/usePageVisibility";
+import { useClockContext } from "../../contexts/ClockContext";
 
 import classes from "./Clock.module.css";
 

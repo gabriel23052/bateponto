@@ -1,15 +1,15 @@
-import PlayIcon from "../assets/icons/play.svg?react";
-import StopIcon from "../assets/icons/stop.svg?react";
+import PlayIcon from "../../assets/icons/play.svg?react";
+import StopIcon from "../../assets/icons/stop.svg?react";
 
-import { useClockContext } from "../contexts/ClockContext";
-import DateUtility from "../utils/DateUtility";
+import { useClockContext } from "../../contexts/ClockContext";
+import DateUtility from "../../utils/DateUtility";
 
-import classes from "./ClockInSection.module.css";
+import classes from "./CheckpointButton.module.css";
 
 /**
  * Componente que exibe o botão de batida e o status
  */
-const ClockInSection = () => {
+const CheckpointButton = () => {
   const { addCheckpoint, inActivity, reports } = useClockContext();
 
   const getLastCheckpoint = () => {
@@ -50,4 +50,4 @@ const ClockInSection = () => {
   );
 };
 
-export default ClockInSection;
+export default CheckpointButton;

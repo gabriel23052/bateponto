@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 import Greeting from "./Greeting";
-import Clock from "./Clock";
+import Clock from "./clock/Clock";
 import DateText from "./DateText";
-import ClockInSection from "./ClockInSection";
+import CheckpointButton from "./checkpoint/CheckpointButton";
 import TodayReport from "./TodayReport";
 import History from "./History";
 import ModalEditWrapper from "./modal/ModalEditWrapper";
@@ -50,7 +50,7 @@ const App = () => {
         <Greeting />
         <Clock />
         <DateText />
-        <ClockInSection />
+        <CheckpointButton />
         <EditContextProvider>
           <TodayReport />
           <History />
