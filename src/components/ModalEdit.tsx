@@ -1,46 +1,66 @@
-import ModalBase from "./ModalBase";
+import { useState } from "react";
+
 import CheckpointList from "./CheckpointList";
 import ReportSum from "./ReportSum";
-import ModalWindow from "./ModalWindow";
-import PrimaryButton from "./PrimaryButton";
+import ModalTitleBar from "./ModalTitleBar";
 import CheckpointInput from "./CheckpointInput";
+import Modal from "./Modal";
+import SaveIcon from "../assets/icons/save.svg?react";
 
 import { useEditContext } from "../contexts/EditContext";
-
 import DateUtility from "../utils/DateUtility";
 
 import classes from "./ModalEdit.module.css";
 
 const ModalEdit = () => {
-  const { inEditionReport, cleanEditReport, save } = useEditContext();
+  const [error, setError] = useState<null | string>(null);
+
+  const { inEditionReport, hasEdited, cleanEditReport, save } =
+    useEditContext();
 
   if (!inEditionReport) return null;
+
   return (
-    <ModalBase closeModal={cleanEditReport} zIndex={1}>
-      <ModalWindow
-        title={new Date(inEditionReport.timestampId).toLocaleDateString(
-          "pt-br",
+    <Modal
+      className={`bg-neutral-white ${classes.container}`}
+      close={cleanEditReport}
+    >
+      <ModalTitleBar closeModal={cleanEditReport}>
+        {`Relatório do dia ${new Date(inEditionReport.timestampId).toLocaleDateString("pt-br")}`}
+      </ModalTitleBar>
+      <div className={classes.reportInfo}>
+        {inEditionReport.checkpoints.length === 0 ? (
+          <p className={`neutral-lightgray text-default ${classes.noActivity}`}>
+            Sem atividade
+          </p>
+        ) : (
+          <CheckpointList
+            checkpoints={inEditionReport.checkpoints}
+            editMode={true}
+          />
         )}
-        closeModal={cleanEditReport}
-      >
-        <div className={`bg-neutral-white ${classes.container}`}>
-          <div className={classes.reportInfo}>
-            <CheckpointList
-              checkpoints={inEditionReport.checkpoints}
-              editMode={true}
-            />
-            <ReportSum
-              sum={DateUtility.getSumView(inEditionReport.sum)}
-              missingCheckpoint={inEditionReport.checkpoints.length % 2 !== 0}
-            />
-          </div>
-          <div className={classes.controls}>
-            <CheckpointInput />
-            <PrimaryButton onClick={save}>SALVAR</PrimaryButton>
-          </div>
-        </div>
-      </ModalWindow>
-    </ModalBase>
+        <ReportSum
+          sum={DateUtility.getSumView(inEditionReport.sum)}
+          missingCheckpoint={inEditionReport.checkpoints.length % 2 !== 0}
+        />
+      </div>
+      {error && (
+        <p className={`negative-feedback text-small ${classes.error}`}>
+          {error}
+        </p>
+      )}
+      <div className={classes.controls}>
+        <CheckpointInput setError={setError} />
+        <button
+          className={`text-default neutral-white bg-neutral-dark ${classes.saveButton}`}
+          onClick={save}
+          disabled={!hasEdited}
+        >
+          salvar
+          <SaveIcon width={24} height={24} />
+        </button>
+      </div>
+    </Modal>
   );
 };
 

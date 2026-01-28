@@ -1,56 +1,42 @@
 .container {
-  width: min-content;
   display: flex;
-  border: 1px solid var(--neutral-light);
   border-radius: 8px;
   transition: 300ms background-color;
-}
-.container:hover {
-  background-color: var(--neutral-xlight);
-}
-.container:focus-within {
-  outline: 2px solid var(--neutral-dark);
-  outline-offset: 2px;
+  gap: var(--px8);
 }
 
 .input {
-  padding-left: var(--px8);
-  padding-block: var(--px4);
-  border-right: var(--px8) solid var(--neutral-xlight);
-  border-radius: 8px 0 0 8px;
+  flex: 1;
+  padding: var(--px4) var(--px8);
+  transition: 300ms border-color;
+  border-bottom: 2px solid var(--neutral-light);
   cursor: text;
-  transition:
-    300ms background-color,
-    300ms border-color;
 }
-.input:hover {
-  background-color: var(--neutral-white);
-  border-color: var(--neutral-white);
+.input:is(:hover, :focus) {
+  border-color: var(--neutral-darkgray);
 }
 
 .button {
   padding-inline: var(--px8);
-  border-radius: 0 8px 8px 0;
   line-height: 0px;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgb(0 0 0 / 25%);
   cursor: pointer;
   transition: 300ms background-color;
 }
-.button:hover {
+.button:disabled {
+  background-color: var(--neutral-lightgray);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.button:not(:disabled):hover {
   background-color: var(--neutral-black);
 }
-.button:is(:disabled:hover, :disabled) {
-  background-color: var(--neutral-light);
-  cursor: not-allowed;
+.button:not(:disabled):focus {
+  outline: 2px solid var(--neutral-darkgray);
+  outline-offset: 2px;
 }
 
 .button svg {
   color: var(--neutral-white);
-  transition: 300ms scale;
-}
-.button:is(:disabled:hover, :disabled:focus, :disabled) svg {
-  color: var(--neutral-lightgray);
-  scale: 1;
-}
-.button:focus svg {
-  scale: 1.05;
 }

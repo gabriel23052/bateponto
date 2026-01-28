@@ -1,6 +1,10 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
-
-import ModalNotice from "./ModalNotice";
+import {
+  useState,
+  type ChangeEvent,
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+} from "react";
 
 import { useEditContext } from "../contexts/EditContext";
 
@@ -8,12 +12,15 @@ import ClockAddIcon from "../assets/icons/clockAdd.svg?react";
 
 import classes from "./CheckpointInput.module.css";
 
-const CheckpointInput = () => {
+type Props = {
+  setError: Dispatch<SetStateAction<string | null>>;
+};
+
+const CheckpointInput = ({ setError }: Props) => {
   const [newCheckpoint, setNewCheckpoint] = useState({
     value: "00:00",
     hasEdited: false,
   });
-  const [modalMessage, setModalMessage] = useState<null | string>(null);
 
   const { validateNewCheckpoint, addCheckpoint, inEditionReport } =
     useEditContext();
@@ -25,30 +32,23 @@ const CheckpointInput = () => {
     checkpointDate.setHours(hr, min);
     const error = validateNewCheckpoint(checkpointDate);
     if (error !== null) {
-      setModalMessage(error);
+      setError(error);
       return;
     }
     addCheckpoint(checkpointDate);
+    setError(null);
     setNewCheckpoint({ value: "00:00", hasEdited: false });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewCheckpoint({ value: e.target.value, hasEdited: true });
+    setError(null);
   };
 
   return (
     <form className={`${classes.container}`} onSubmit={submit}>
-      {modalMessage && (
-        <ModalNotice
-          closeModal={() => {
-            setModalMessage(null);
-          }}
-        >
-          {modalMessage}
-        </ModalNotice>
-      )}
       <input
-        className={`neutral-darkgray text-default-m bg-neutral-xlight ${classes.input}`}
+        className={`neutral-dark text-default-m ${classes.input}`}
         id="newCheckpoint"
         name="newCheckpoint"
         type="time"

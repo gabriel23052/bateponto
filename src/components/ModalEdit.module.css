@@ -1,18 +1,80 @@
 .container {
+  width: min(600px, 100%);
+  margin: auto;
   padding: var(--px16);
-  border-radius: 0 0 var(--px16) var(--px16);
+  border-radius: var(--px16);
+  box-shadow: 0px 0px 8px rgb(0 0 0 / 25%);
 }
 
 .reportInfo {
   display: flex;
-  gap: var(--px12);
   align-items: center;
-  margin-bottom: var(--px24);
+  gap: var(--px12);
+  margin-bottom: var(--px28);
+}
+
+.noActivity {
+  flex: 1;
+  text-align: center;
+  padding-block: 2.75rem; /* 44px */
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--px4);
+  margin-bottom: var(--px16);
+}
+.error::before {
+  content: "";
+  width: var(--px16);
+  height: var(--px16);
+  display: block;
+  background: url("../assets/icons/alert.svg");
+  background-size: 100%;
 }
 
 .controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--px16);
+}
+
+.saveButton {
   display: flex;
-  gap: var(--px12);
-  justify-content: end;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--px16);
+  justify-self: end;
+  padding: var(--px4) var(--px12);
+  border-radius: 4px;
+  box-shadow: 0 0 var(--px4) rgb(0 0 0 / 25%);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 300ms background-color;
+
+  @media (max-width: 600px) {
+    justify-self: stretch;
+  }
+}
+.saveButton:disabled {
+  background-color: var(--neutral-light);
+  color: var(--neutral-lightgray);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.saveButton:not(:disabled):hover {
+  background-color: var(--neutral-black);
+}
+.saveButton:not(:disabled):focus {
+  outline: 2px solid var(--neutral-darkgray);
+  outline-offset: 2px;
+}
+
+.saveButton:disabled svg {
+  color: var(--neutral-lightgray);
+}
+.saveButton svg {
+  color: var(--neutral-light);
 }
 

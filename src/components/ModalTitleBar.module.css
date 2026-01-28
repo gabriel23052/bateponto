@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--px16);
+}
+
+.container button {
+  padding: var(--px8);
+  border-radius: 4px;
+  line-height: 0;
+  cursor: pointer;
+  transition: 300ms background-color;
+}
+.container button:hover {
+  background-color: var(--neutral-darkgray);
+}
+.container button:focus {
+  outline: 2px solid var(--neutral-lightgray);
+}
+
+.container button svg {
+  color: var(--neutral-darkgray);
+  transition: 300ms color;
+}
+.container button:hover svg {
+  color: var(--neutral-white);
+}
+

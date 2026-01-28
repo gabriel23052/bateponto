@@ -8,6 +8,7 @@ type ProviderProps = {
 
 type ContextValue = {
   inEditionReport: TReport | null;
+  hasEdited: boolean;
   editReport: (report: TReport) => void;
   eraseCheckpoint: (timestampId: number) => void;
   cleanEditReport: () => void;
@@ -23,12 +24,14 @@ const EditContext = createContext<ContextValue | undefined>(undefined);
 
 const EditContextProvider = ({ children }: ProviderProps) => {
   const [inEditionReport, setInEditionReport] = useState<TReport | null>(null);
+  const [hasEdited, setHasEdited] = useState(false);
 
   const editReport = (report: TReport) => {
     setInEditionReport({
       ...report,
       checkpoints: [...report.checkpoints],
     });
+    setHasEdited(false);
   };
 
   const { replaceReport } = useClockContext();
@@ -43,6 +46,7 @@ const EditContextProvider = ({ children }: ProviderProps) => {
       );
       return { ...prev, checkpoints };
     });
+    setHasEdited(true);
     updateSum();
   };
 
@@ -78,6 +82,7 @@ const EditContextProvider = ({ children }: ProviderProps) => {
         ),
       };
     });
+    setHasEdited(true);
     updateSum();
   };
 
@@ -95,6 +100,7 @@ const EditContextProvider = ({ children }: ProviderProps) => {
     <EditContext
       value={{
         inEditionReport,
+        hasEdited,
         editReport,
         eraseCheckpoint,
         cleanEditReport,

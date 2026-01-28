@@ -4,7 +4,8 @@ import DateText from "./DateText";
 import ClockInSection from "./ClockInSection";
 import TodayReport from "./TodayReport";
 import History from "./History";
-import ModalEdit from "./ModalEdit";
+import ModalEditWrapper from "./ModalEditWrapper";
+
 import { ClockContextProvider } from "../contexts/ClockContext";
 import { EditContextProvider } from "../contexts/EditContext";
 
@@ -24,7 +25,7 @@ const App = () => {
         <EditContextProvider>
           <TodayReport />
           <History />
-          <ModalEdit />
+          <ModalEditWrapper />
         </EditContextProvider>
       </ClockContextProvider>
     </main>
