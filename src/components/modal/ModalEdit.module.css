@@ -17,6 +17,7 @@
   flex: 1;
   text-align: center;
   padding-block: 2.75rem; /* 44px */
+  user-select: none;
 }
 
 .error {
@@ -77,5 +78,4 @@
 .saveButton:disabled svg {
   color: var(--neutral-lightgray);
 }
-
 

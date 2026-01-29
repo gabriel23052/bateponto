@@ -1,0 +1,26 @@
+.button {
+  padding: var(--px8);
+  line-height: 0;
+  border-radius: var(--px16);
+  box-shadow: 0 0 4px rgb(0 0 0 / 15%);
+  transition:
+    300ms opacity,
+    300ms background-color;
+  cursor: pointer;
+  position: fixed;
+  bottom: var(--px32);
+  right: var(--px32);
+}
+.button:hover {
+  background-color: var(--neutral-dark);
+}
+.button:focus {
+  outline: 2px solid var(--neutral-darkgray);
+  outline-offset: 2px;
+}
+
+.button svg {
+  width: var(--px32);
+  height: var(--px32);
+  color: var(--neutral-white);
+}

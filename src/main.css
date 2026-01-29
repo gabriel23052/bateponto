@@ -54,11 +54,13 @@ ul {
   --standby-gradient: linear-gradient(to right, #0084ff, #1ec0e4);
   --activity-gradient: linear-gradient(to right, #ff9500, #ffc014);
 
-  --transition-gradient: linear-gradient(
+   --transition-gradient: linear-gradient(
     90deg,
     #0084ff 0%,
-    #1ec0e4 49.99%,
-    #ff9500 50%,
+    #1ec0e4 33.33%,
+    #dfdfdf 33.33%,
+    #dfdfdf 66.66%,
+    #ff9500 66.66%,
     #ffc014 100%
   );
 

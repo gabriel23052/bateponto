@@ -7,7 +7,9 @@
   padding: var(--px16);
   border-radius: 16px;
   corner-shape: squircle;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 0 var(--px4) rgb(0 0 0 / 10%),
+    0 0 var(--px12) rgb(0 0 0 / 5%);
   outline: 2px solid transparent;
   opacity: 0;
   outline-offset: var(--px8);
@@ -15,6 +17,7 @@
   transition: outline-color 400ms;
   position: relative;
   animation: fromLeft 500ms forwards;
+  -webkit-tap-highlight-color: transparent;
 
   @media (max-width: 500px) {
     display: grid;

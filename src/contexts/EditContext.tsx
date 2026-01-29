@@ -88,7 +88,7 @@ const EditContextProvider = ({ children }: ProviderProps) => {
 
   const save = () => {
     if (!inEditionReport) return;
-    replaceReport(inEditionReport);
+    replaceReport({...inEditionReport, hasAdjustment: true});
     setInEditionReport(null);
   };
 

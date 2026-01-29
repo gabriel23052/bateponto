@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 import PlayIcon from "../../assets/icons/play.svg?react";
 import StopIcon from "../../assets/icons/stop.svg?react";
 
@@ -6,11 +8,17 @@ import DateUtility from "../../utils/DateUtility";
 
 import classes from "./CheckpointButton.module.css";
 
+const CHECKPOINT_DELAY = 5000;
+
 /**
  * Componente que exibe o botão de batida e o status
  */
 const CheckpointButton = () => {
+  const [blocked, setBlocked] = useState(false);
+
   const { addCheckpoint, inActivity, reports } = useClockContext();
+
+  const blockTimeout = useRef<number | null>(null);
 
   const getLastCheckpoint = () => {
     return DateUtility.getTimeView(
@@ -18,13 +26,31 @@ const CheckpointButton = () => {
     );
   };
 
+  const handleClick = () => {
+    setBlocked(true);
+    addCheckpoint();
+    blockTimeout.current = setTimeout(() => {
+      setBlocked(false);
+    }, CHECKPOINT_DELAY);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (blockTimeout.current) {
+        clearTimeout(blockTimeout.current);
+        blockTimeout.current = null;
+      }
+    };
+  }, []);
+
   return (
     <section className={classes.container}>
       <button
         className={`neutral-white text-xlarge ${classes.button} ${
           inActivity ? classes.activity : ""
         }`}
-        onClick={addCheckpoint}
+        onClick={handleClick}
+        disabled={blocked}
       >
         {inActivity ? (
           <>

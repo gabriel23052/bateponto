@@ -11,32 +11,47 @@
   margin-inline: auto;
   padding: var(--px24) var(--px20);
   background: var(--transition-gradient);
-  background-size: 37.5rem /* 600px */ 100%;
-  background-position: 0px;
+  background-size: 56.25rem 100%; /* 900px */
   text-transform: uppercase;
   border-radius: 16px;
   corner-shape: squircle;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 8px rgb(0 0 0 / 25%);
   cursor: pointer;
   transition:
-    500ms background-position,
-    300ms scale;
-}
-.button:is(:hover, :focus) {
-  background-position: -2% 0;
-  scale: 1.02;
-}
-.button.activity:is(:hover, :focus) {
-  background-position: -98% 0;
+    300ms outline-color,
+    600ms background-position,
+    300ms scale,
+    500ms 100ms color,
+    600ms box-shadow;
 }
 .button.activity {
-  background-position: -100% 0;
+  background-position: -37.5rem 0px; /* 600px */
+}
+.button:hover {
+  scale: 1.02;
+}
+.button:focus {
+  outline: 2px solid var(--standby);
+  outline-offset: 4px;
+}
+.button.activity:focus {
+  outline-color: var(--activity);
+}
+.button:disabled {
+  background-position: -18.75rem 0px; /* 300px */
+  scale: 0.98;
+  color: var(--neutral-darkgray);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 .button svg {
   color: var(--neutral-white);
   width: var(--px20);
   height: 1.5625rem; /* 25px */
+}
+.button:disabled svg {
+  color: var(--neutral-darkgray);
 }
 .button.activity svg {
   width: 1.375rem; /* 22px */
