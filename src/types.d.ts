@@ -12,6 +12,7 @@ type TReport = {
   timestampId: number;
   checkpoints: number[];
   sum: number;
+  hasAdjustment: boolean;
 };
 
 type TReportKeyValue = [number, TReport];

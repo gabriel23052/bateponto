@@ -28,6 +28,7 @@ describe("ClockHandler", () => {
           timestampId: today.getTime() - i * MILLISECONDS_IN_DAY,
           checkpoints: [],
           sum: 0,
+          hasAdjustment: false,
         });
       }
     });
@@ -44,8 +45,74 @@ describe("ClockHandler", () => {
           timestampId: today.getTime() - i * MILLISECONDS_IN_DAY,
           checkpoints: [],
           sum: 0,
+          hasAdjustment: false,
         });
       }
+    });
+
+    it("Adiciona batidas automáticas caso passe da meia noite em atividade", () => {
+      const clockHandler = new ClockHandler();
+      const yesterday = new Date(new Date().getTime() - MILLISECONDS_IN_DAY);
+      yesterday.setHours(10, 30, 20, 155);
+      clockHandler.addCheckpoint(yesterday);
+      const anotherClockHandler = new ClockHandler();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const expectedTodayReport: TReport = {
+        timestampId: today.getTime(),
+        checkpoints: [today.getTime()],
+        sum: 0,
+        hasAdjustment: false,
+      };
+      const expectedYesterdayReport: TReport = {
+        timestampId: today.getTime() - MILLISECONDS_IN_DAY,
+        checkpoints: [yesterday.getTime(), today.getTime() - 1],
+        sum: 48_579_844,
+        hasAdjustment: true,
+      };
+      expect(anotherClockHandler.getReports(0, 1)[0]).toBeDefined();
+      expect(anotherClockHandler.getReports(1, 1)[0].checkpoints).toHaveLength(
+        2,
+      );
+      expect(anotherClockHandler.getReports(0, 1)[0]).toEqual(
+        expectedTodayReport,
+      );
+      expect(anotherClockHandler.getReports(1, 1)[0]).toEqual(
+        expectedYesterdayReport,
+      );
+    });
+
+    it("Falha ao adicionar batida no primeiro ou ultimo milissegundo do dia", () => {
+      const clockHandler = new ClockHandler();
+      const firstMillisecond = new Date();
+      const lastMillisecond = new Date();
+      firstMillisecond.setHours(0, 0, 0, 0);
+      // Isso evita o erro "batida não pode ser adicionada no futuro"
+      lastMillisecond.setDate(firstMillisecond.getDate() - 1);
+      lastMillisecond.setHours(23, 59, 59, 999);
+      expect(() => {
+        clockHandler.addCheckpoint(firstMillisecond);
+      }).toThrowError(
+        "Checkpoints in the first and last milliseconds of the day are not allowed.",
+      );
+      expect(() => {
+        clockHandler.addCheckpoint(lastMillisecond);
+      }).toThrowError(
+        "Checkpoints in the first and last milliseconds of the day are not allowed.",
+      );
+    });
+
+    it("Não adiciona batidas de correção caso isso já tenha sido feito", () => {
+      const clockHandler = new ClockHandler();
+      const [yesterdayReport] = clockHandler.getReports(1, 1);
+      yesterdayReport.hasAdjustment = true;
+      clockHandler.addCheckpoint(
+        new Date(yesterdayReport.timestampId + 10_000),
+      );
+      const anotherClockHandler = new ClockHandler();
+      expect(anotherClockHandler.getReports(1, 1)[0].checkpoints).toHaveLength(
+        1,
+      );
     });
   });
 
@@ -116,6 +183,25 @@ describe("ClockHandler", () => {
       expect(report).toHaveLength(1);
       expect(report[0].checkpoints).toHaveLength(4);
       expect(report[0].sum).toBe(10_812_296);
+    });
+  });
+
+  describe("refresh", () => {
+    it("Corrige o período corretamente", () => {
+      const DAYS_AGO = 1;
+      const clockHandler = new ClockHandler();
+      createOutOfRangeReports(DAYS_AGO, REPORTS_RANGE_DAYS, "reports");
+      // @ts-expect-error — acesso intencional a membro privado para teste
+      clockHandler.reportsMap.clear();
+      // @ts-expect-error — acesso intencional a membro privado para teste
+      clockHandler.getReportsFromLocalStorage();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      expect(clockHandler.getReports(0, 1)).toHaveLength(0);
+      clockHandler.refresh();
+      expect(clockHandler.getReports(0, 1)[0].timestampId).toBe(
+        today.getTime(),
+      );
     });
   });
 });

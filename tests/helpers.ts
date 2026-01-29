@@ -16,6 +16,7 @@ export function createOutOfRangeReports(
         timestampId,
         checkpoints: [],
         sum: 0,
+        hasAdjustment: false,
       },
     ]);
   }

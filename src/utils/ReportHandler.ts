@@ -1,3 +1,5 @@
+const MILLISECONDS_IN_DAY = 86_400_000;
+
 /**
  * Manipula reports de forma individual
  */
@@ -14,10 +16,18 @@ export default class ReportHandler {
   /**
    * Adiciona uma nova batida em um determinado report
    */
-  public addCheckpoint(clockInJsDate: Date) {
+  public addCheckpoint(clockInJsDate: Date, skipValidation = false) {
     const timestamp = clockInJsDate.getTime();
     if (this.report.checkpoints.includes(timestamp))
       throw new Error("Checkpoint already exists in the report.");
+    if (
+      !skipValidation &&
+      (timestamp === this.report.timestampId ||
+        timestamp === this.report.timestampId + MILLISECONDS_IN_DAY - 1)
+    )
+      throw new Error(
+        "Checkpoints in the first and last milliseconds of the day are not allowed.",
+      );
     this.report.checkpoints.push(timestamp);
     this.report.checkpoints.sort((a, b) => a - b);
     this.calculateSum();

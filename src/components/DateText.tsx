@@ -27,9 +27,9 @@ const MONTHS = [
   "dezembro",
 ];
 
-const DATE_REFRESH_DELAY = 1000;
+const DATE_REFRESH_DELAY = 100;
 
-/** 
+/**
  * Componente com a data em formato extendido "DIA_DA_SEMANA, DIA de MÊS de ANO"
  */
 const DateText = () => {
@@ -49,7 +49,7 @@ const DateText = () => {
     const tomorrow = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate() + 1
+      now.getDate() + 1,
     );
     const timestamp = tomorrow.getTime() - now.getTime() + DATE_REFRESH_DELAY;
     timeout.current = window.setTimeout(() => {

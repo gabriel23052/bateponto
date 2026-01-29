@@ -19,8 +19,13 @@ export default class ClockHandler {
    * do localStorage ou criando novos
    */
   constructor() {
+    if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
+      this.createReports();
+      return;
+    }
     this.getReportsFromLocalStorage();
     this.updateReportsRange();
+    this.adjustYesterdayIfNeeds();
   }
 
   /**
@@ -29,10 +34,7 @@ export default class ClockHandler {
    */
   private getReportsFromLocalStorage() {
     const reportsJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (reportsJSON === null) {
-      this.createReports();
-      return;
-    }
+    if (reportsJSON === null) return;
     const reports = (() => {
       let reports: TReportKeyValue[];
       try {
@@ -69,6 +71,7 @@ export default class ClockHandler {
         timestampId: timestampId,
         checkpoints: [],
         sum: 0,
+        hasAdjustment: false,
       };
       this.reportsMap.set(timestampId, emptyReport);
     }
@@ -95,22 +98,43 @@ export default class ClockHandler {
         timestampId,
         checkpoints: [],
         sum: 0,
+        hasAdjustment: false,
       });
     }
     this.updateLocalStorage();
   }
 
   /**
+   * Adiciona uma batida no último milissegundo do dia anterior e no primeiro do dia
+   * corrente caso o dia anterior tenha sido encerrado com número ímpar de batidas
+   */
+  private adjustYesterdayIfNeeds() {
+    const [yesterdayReport] = this.getReports(1, 1);
+    if (
+      yesterdayReport.checkpoints.length % 2 === 0 ||
+      yesterdayReport.hasAdjustment
+    )
+      return;
+    const [todayReport] = this.getReports(0, 1);
+    const yesterdayCheckpoint = new Date(todayReport.timestampId - 1);
+    const todayCheckpoint = new Date(todayReport.timestampId);
+    yesterdayReport.hasAdjustment = true;
+    this.addCheckpoint(yesterdayCheckpoint, true);
+    this.addCheckpoint(todayCheckpoint, true);
+  }
+
+  /**
    * Adiciona uma nova batida em um relatório, retorna o relatório atualizado
    */
-  public addCheckpoint(clockInDate: Date) {
+  public addCheckpoint(clockInDate: Date, skipValidation = false) {
     const timestampId = DateUtility.getReportIdFromDate(clockInDate);
     const report = this.reportsMap.get(timestampId);
     if (!report) throw new Error("Report don't found: " + timestampId);
     if (new Date().getTime() < clockInDate.getTime())
       throw new Error("The report cannot be in the future");
+
     const reportHandler = new ReportHandler(report);
-    reportHandler.addCheckpoint(clockInDate);
+    reportHandler.addCheckpoint(clockInDate, skipValidation);
     this.updateLocalStorage();
     return {
       ...report,
@@ -142,5 +166,12 @@ export default class ClockHandler {
       reports.push(report);
     }
     return reports;
+  }
+  /**
+   * Atualiza o estado, deve ser chamada meia-noite
+   */
+  public refresh() {
+    this.updateReportsRange();
+    this.adjustYesterdayIfNeeds();
   }
 }
