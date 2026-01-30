@@ -9,7 +9,8 @@ type Props = {
 };
 
 /**
- * Componente do dígito animado do relógio
+ * Exibe um dígito do relógio animado
+ * @param digit Digito a ser exibido
  */
 const ClockDigit = ({ digit }: Props) => {
   const hiddenCharIndex = useRef<0 | 1>(1);

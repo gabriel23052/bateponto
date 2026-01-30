@@ -30,14 +30,14 @@ const MONTHS = [
 const DATE_REFRESH_DELAY = 100;
 
 /**
- * Componente com a data em formato extendido "DIA_DA_SEMANA, DIA de MÊS de ANO"
+ * Exibe a data do dia corrente
  */
 const DateText = () => {
   const getDate = () => {
-    const now = new Date();
-    return `${DAYS_OF_WEEK[now.getDay()]}, ${now.getDate()}${
-      now.getDate() === 1 ? "º" : ""
-    } de ${MONTHS[now.getMonth()]} de ${now.getFullYear()}`;
+    const nowDate = new Date();
+    return `${DAYS_OF_WEEK[nowDate.getDay()]}, ${nowDate.getDate()}${
+      nowDate.getDate() === 1 ? "º" : ""
+    } de ${MONTHS[nowDate.getMonth()]} de ${nowDate.getFullYear()}`;
   };
 
   const [dateText, setDateText] = useState(getDate());
@@ -45,16 +45,15 @@ const DateText = () => {
   const timeout = useRef<number>(null);
 
   useEffect(() => {
-    const now = new Date();
-    const tomorrow = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + 1,
-    );
-    const timestamp = tomorrow.getTime() - now.getTime() + DATE_REFRESH_DELAY;
+    const nowDate = new Date();
+    const tomorrowDate = new Date(nowDate);
+    tomorrowDate.setHours(0, 0, 0, 0);
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const difference =
+      tomorrowDate.getTime() - nowDate.getTime() + DATE_REFRESH_DELAY;
     timeout.current = window.setTimeout(() => {
       setDateText(getDate());
-    }, timestamp);
+    }, difference);
     return () => {
       if (timeout.current !== null) {
         clearTimeout(timeout.current);

@@ -29,7 +29,7 @@ const Report = ({ report, disableAlert }: Props) => {
         editReport(report);
       }}
     >
-      <ReportDate date={DateUtility.getReportViewDate(report.timestampId)} />
+      <ReportDate date={DateUtility.getReportViewDate(report.id)} />
       {report.checkpoints.length === 0 ? (
         <p className={`neutral-lightgray text-default ${classes.noActivity}`}>
           Sem atividade

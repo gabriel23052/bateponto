@@ -11,7 +11,7 @@ import classes from "./CheckpointButton.module.css";
 const CHECKPOINT_DELAY = 5000;
 
 /**
- * Componente que exibe o botão de batida e o status
+ * Exibe o botão de batida e o status atual
  */
 const CheckpointButton = () => {
   const [blocked, setBlocked] = useState(false);

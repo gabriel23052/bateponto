@@ -16,6 +16,7 @@ const SHORT_DAYS_OF_WEEK: TShortDayOfWeek[] = [
 export default class DateUtility {
   /**
    * Retorna um timestamp id para o relatório a partir de uma data
+   * @param date Data da qual será retornada o id
    */
   public static getReportIdFromDate(date: Date) {
     const idDate = new Date(date);
@@ -24,32 +25,12 @@ export default class DateUtility {
   }
 
   /**
-   * Retorna um horário em visualização amigável a partir de um timestamp
+   * Retorna a data em forma de visualização amigável
+   * @param id ID do qual será gerado a data
    */
-  public static viewTimeFromTimestamp(timestamp: number) {
-    const date = new Date(timestamp);
-    return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
-  }
-
-  /**
-   * Retorna o horário em formato de visualização HH:MM a partir dos
-   * milissegundos
-   */
-  public static viewTimeFromMilliseconds(milliseconds: number): string {
-    const hours = Math.floor(milliseconds / MILLISECONDS_IN_HOUR);
-    const minutes = Math.floor(
-      (milliseconds % MILLISECONDS_IN_HOUR) / MILLISECONDS_IN_MINUTE,
-    );
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-  }
-
-  /**
-   * Retorna a data em forma de visualização amigável para utilizar
-   * nos relatórios
-   */
-  public static getReportViewDate(timestampId: number): TReportViewDate {
+  public static getReportViewDate(id: number): TReportViewDate {
     const todayDate = new Date();
-    const date = new Date(timestampId);
+    const date = new Date(id);
     todayDate.setHours(0, 0, 0, 0);
     date.setHours(0, 0, 0, 0);
     const day = date.getDate().toString().padStart(2, "0");
@@ -61,6 +42,10 @@ export default class DateUtility {
     };
   }
 
+  /**
+   * Retorna a soma de um relatório em formato de visualização amigável
+   * @param milliseconds Soma em milissegundos
+   */
   public static getSumView(milliseconds: number) {
     const hr = Math.floor(milliseconds / MILLISECONDS_IN_HOUR);
     const min = Math.floor(
@@ -71,6 +56,10 @@ export default class DateUtility {
     );
   }
 
+  /**
+   * Retorna o horário em formato amigável
+   * @param timestamp Timestamp do horário
+   */
   public static getTimeView(timestamp: number) {
     return new Date(timestamp).toLocaleTimeString("pt-br", {
       timeStyle: "short",

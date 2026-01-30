@@ -3,7 +3,7 @@ import { useClockContext } from "../contexts/ClockContext";
 import Report from "./report/Report";
 
 /**
- * Componente wrapper para exibir o relatório do dia corrente
+ * Wrapper para exibir o relatório do dia corrente
  */
 const TodayReport = () => {
   const { reports } = useClockContext();

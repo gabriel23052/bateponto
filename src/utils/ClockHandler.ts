@@ -45,8 +45,8 @@ export default class ClockHandler {
       }
       return reports;
     })();
-    reports.forEach(([timestampId, rp]) => {
-      this.reportsMap.set(timestampId, rp);
+    reports.forEach(([id, report]) => {
+      this.reportsMap.set(id, report);
     });
   }
 
@@ -64,16 +64,16 @@ export default class ClockHandler {
    * para os últimos 30 dias caso ainda não exista
    */
   private createReports() {
-    const todayDate = DateUtility.getReportIdFromDate(new Date());
+    const todayId = DateUtility.getReportIdFromDate(new Date());
     for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
-      const timestampId = todayDate - i * MILLISECONDS_IN_DAY;
+      const newReportId = todayId - i * MILLISECONDS_IN_DAY;
       const emptyReport: TReport = {
-        timestampId: timestampId,
+        id: newReportId,
         checkpoints: [],
         sum: 0,
         hasAdjustment: false,
       };
-      this.reportsMap.set(timestampId, emptyReport);
+      this.reportsMap.set(newReportId, emptyReport);
     }
     this.updateLocalStorage();
   }
@@ -83,19 +83,16 @@ export default class ClockHandler {
    * adicionando novas entradas vazias conforme necessário
    */
   private updateReportsRange() {
-    const reportTimestampIds = Array.from(this.reportsMap.keys());
-    const todayTimestampId = DateUtility.getReportIdFromDate(new Date());
-    const limitTimestampId =
-      todayTimestampId - (REPORTS_RANGE_DAYS - 1) * MILLISECONDS_IN_DAY;
-    const toErase = reportTimestampIds.filter(
-      (timestampId) => timestampId < limitTimestampId,
-    );
+    const ids = Array.from(this.reportsMap.keys());
+    const todayId = DateUtility.getReportIdFromDate(new Date());
+    const limitId = todayId - (REPORTS_RANGE_DAYS - 1) * MILLISECONDS_IN_DAY;
+    const toErase = ids.filter((id) => id < limitId);
     if (toErase.length === 0) return;
     for (let i = 0; i < toErase.length; i++) {
       this.reportsMap.delete(toErase[i]);
-      const timestampId = todayTimestampId - i * MILLISECONDS_IN_DAY;
-      this.reportsMap.set(timestampId, {
-        timestampId,
+      const newReportId = todayId - i * MILLISECONDS_IN_DAY;
+      this.reportsMap.set(newReportId, {
+        id: newReportId,
         checkpoints: [],
         sum: 0,
         hasAdjustment: false,
@@ -116,25 +113,26 @@ export default class ClockHandler {
     )
       return;
     const [todayReport] = this.getReports(0, 1);
-    const yesterdayCheckpoint = new Date(todayReport.timestampId - 1);
-    const todayCheckpoint = new Date(todayReport.timestampId);
+    const yesterdayCheckpointDate = new Date(todayReport.id - 1);
+    const todayCheckpointDate = new Date(todayReport.id);
     yesterdayReport.hasAdjustment = true;
-    this.addCheckpoint(yesterdayCheckpoint, true);
-    this.addCheckpoint(todayCheckpoint, true);
+    this.addCheckpoint(yesterdayCheckpointDate, true);
+    this.addCheckpoint(todayCheckpointDate, true);
   }
 
   /**
    * Adiciona uma nova batida em um relatório, retorna o relatório atualizado
+   * @param checkpointDate Data da batida
+   * @param skipValidation Define se a função deve pular a validação de primeiro e último milissegundo do dia
    */
-  public addCheckpoint(clockInDate: Date, skipValidation = false) {
-    const timestampId = DateUtility.getReportIdFromDate(clockInDate);
-    const report = this.reportsMap.get(timestampId);
-    if (!report) throw new Error("Report don't found: " + timestampId);
-    if (new Date().getTime() < clockInDate.getTime())
+  public addCheckpoint(checkpointDate: Date, skipValidation = false) {
+    const newCheckpointId = DateUtility.getReportIdFromDate(checkpointDate);
+    const report = this.reportsMap.get(newCheckpointId);
+    if (!report) throw new Error("Report don't found: " + newCheckpointId);
+    if (new Date().getTime() < checkpointDate.getTime())
       throw new Error("The report cannot be in the future");
-
     const reportHandler = new ReportHandler(report);
-    reportHandler.addCheckpoint(clockInDate, skipValidation);
+    reportHandler.addCheckpoint(checkpointDate, skipValidation);
     this.updateLocalStorage();
     return {
       ...report,
@@ -144,31 +142,33 @@ export default class ClockHandler {
 
   /**
    * Substitui um relatório no mapa e atualiza o localStorage
+   * @param report Relatório que irá substituir
    */
   public replaceReport(report: TReport) {
-    this.reportsMap.set(report.timestampId, report);
+    this.reportsMap.set(report.id, report);
     this.updateLocalStorage();
   }
 
   /**
-   * Retorna os relatórios dado um número de dias atrás e
-   * a quantidade
+   * Retorna os relatórios
+   * @param daysOffset Número de dias atrás
+   * @param amount Quantidade de relatórios
    */
   public getReports(daysOffset: number, amount: number): TReport[] {
-    const todayTimestampId = DateUtility.getReportIdFromDate(new Date());
+    const todayId = DateUtility.getReportIdFromDate(new Date());
     const reports: TReport[] = [];
     for (let i = 0; i < amount; i++) {
-      const targetTimestampId =
-        todayTimestampId -
-        (daysOffset * MILLISECONDS_IN_DAY + i * MILLISECONDS_IN_DAY);
-      const report = this.reportsMap.get(targetTimestampId);
+      const targetId =
+        todayId - (daysOffset * MILLISECONDS_IN_DAY + i * MILLISECONDS_IN_DAY);
+      const report = this.reportsMap.get(targetId);
       if (!report) continue;
       reports.push(report);
     }
     return reports;
   }
+
   /**
-   * Atualiza o estado, deve ser chamada meia-noite
+   * Atualiza o estado
    */
   public refresh() {
     this.updateReportsRange();

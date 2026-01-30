@@ -9,11 +9,11 @@ export function createOutOfRangeReports(
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   for (let i = 0; i < amount; i++) {
-    const timestampId = today.getTime() - (daysAgo + i) * MILLISECONDS_IN_DAY;
+    const id = today.getTime() - (daysAgo + i) * MILLISECONDS_IN_DAY;
     reports.push([
-      timestampId,
+      id,
       {
-        timestampId,
+        id: id,
         checkpoints: [],
         sum: 0,
         hasAdjustment: false,

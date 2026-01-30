@@ -8,21 +8,21 @@ import classes from "./ModalNotice.module.css";
 
 const LOCAL_STORAGE_KEY = "lastReportNotified";
 
+/**
+ * Exibe o modal de aviso
+ */
 const ModalNotice = () => {
   const { reports } = useClockContext();
 
   const [show, setShow] = useState(() => {
-    const lastReportNotified = localStorage.getItem(LOCAL_STORAGE_KEY);
-    const { timestampId, hasAdjustment } = reports.data[1];
+    const lastIdNotified = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const { id, hasAdjustment } = reports.data[1];
     if (!hasAdjustment) return false;
-    if (!lastReportNotified) {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY,
-        timestampId.toString(),
-      );
+    if (!lastIdNotified) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, id.toString());
       return true;
     }
-    return Number(lastReportNotified) !== timestampId;
+    return Number(lastIdNotified) !== id;
   });
 
   if (!show) return null;

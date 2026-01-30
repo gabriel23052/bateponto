@@ -52,7 +52,7 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
     setReports((prev) => ({
       ...prev,
       data: prev.data.map((rp) =>
-        rp.timestampId === updatedReport.timestampId ? updatedReport : rp,
+        rp.id === updatedReport.id ? updatedReport : rp,
       ),
     }));
   };
@@ -63,7 +63,7 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
       return {
         reachedEnd: prev.reachedEnd,
         data: prev.data.map((rp) => {
-          if (rp.timestampId === report.timestampId) return { ...report };
+          if (rp.id === report.id) return { ...report };
           return rp;
         }),
       };
@@ -73,35 +73,35 @@ const ClockContextProvider = ({ children }: ProviderProps) => {
   const orderMoreReports = () => {
     if (reports.reachedEnd) return;
     setReports((prev) => {
-      const newData = clockHandler.getReports(
+      const newReports = clockHandler.getReports(
         prev.data.length + 1,
         REPORTS_ORDER_AMOUNT,
       );
-      const reachedEnd = newData.length < REPORTS_ORDER_AMOUNT;
+      const reachedEnd = newReports.length < REPORTS_ORDER_AMOUNT;
       return {
         reachedEnd,
-        data: [...prev.data, ...newData],
+        data: [...prev.data, ...newReports],
       };
     });
   };
 
   const _getDifferenceToMidNight = () => {
-    const now = new Date();
-    const midNight = new Date();
-    midNight.setHours(0, 0, 0, 0);
-    midNight.setDate(midNight.getDate() + 1);
-    return midNight.getTime() - now.getTime() + MID_NIGHT_REFRESH_DELAY;
+    const nowDate = new Date();
+    const midNightDate = new Date();
+    midNightDate.setHours(0, 0, 0, 0);
+    midNightDate.setDate(midNightDate.getDate() + 1);
+    return midNightDate.getTime() - nowDate.getTime() + MID_NIGHT_REFRESH_DELAY;
   };
 
   const _midNightRefresh = () => {
     clockHandler.refresh();
     setReports((prev) => {
-      const [todayReport, yesterDayReport] = clockHandler.getReports(0, 2);
-      const newData = [...prev.data];
-      newData[0] = todayReport;
-      newData[1] = yesterDayReport;
-      newData.pop();
-      return { reachedEnd: prev.reachedEnd, data: newData };
+      const [todayReport, yesterdayReport] = clockHandler.getReports(0, 2);
+      const updatedReports = [...prev.data];
+      updatedReports[0] = todayReport;
+      updatedReports[1] = yesterdayReport;
+      updatedReports.pop();
+      return { reachedEnd: prev.reachedEnd, data: updatedReports };
     });
     _midNightTimeout.current = setTimeout(
       _midNightRefresh,

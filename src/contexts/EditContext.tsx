@@ -10,7 +10,7 @@ type ContextValue = {
   inEditionReport: TReport | null;
   hasEdited: boolean;
   editReport: (report: TReport) => void;
-  eraseCheckpoint: (timestampId: number) => void;
+  eraseCheckpoint: (id: number) => void;
   cleanEditReport: () => void;
   validateNewCheckpoint: (checkpointDate: Date) => string | null;
   addCheckpoint: (newCheckpointDate: Date) => void;

@@ -11,7 +11,10 @@ type Props = {
 };
 
 /**
- * Exibe um período
+ * Exibe uma batida ou um par de batidas
+ * @param start Timestamp da primeira batida
+ * @param end Timestamp da segunda batida (opcional)
+ * @param editMode Habilita o modo edição que permite apagar batidas
  */
 const Checkpoint = ({ start, end, editMode }: Props) => {
   const { eraseCheckpoint } = useEditContext();

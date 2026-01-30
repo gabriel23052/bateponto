@@ -1,7 +1,7 @@
 import classes from "./Greeting.module.css";
 
 /**
- * Componente com texto de saudação dinâmico, vária conforme horário do dia
+ * Exibe texto de saudação dinâmico, vária conforme horário do dia
  */
 const Greeting = () => {
   const getDynamicGreeting = () => {

@@ -9,26 +9,33 @@ export default class ReportHandler {
    */
   private report: TReport;
 
+  /**
+   * Construtor, apenas armazena a referência do relatório
+   * @param report Referência do relatório a ser manipulado
+   */
   constructor(report: TReport) {
     this.report = report;
   }
 
   /**
    * Adiciona uma nova batida em um determinado report
+   * @param newCheckpointDate Data da nova batida
+   * @param skipValidation Define se a função deve pular a validação de primeiro e último milissegundo do dia
    */
-  public addCheckpoint(clockInJsDate: Date, skipValidation = false) {
-    const timestamp = clockInJsDate.getTime();
-    if (this.report.checkpoints.includes(timestamp))
+  public addCheckpoint(newCheckpointDate: Date, skipValidation = false) {
+    const checkpointTimestamp = newCheckpointDate.getTime();
+    if (this.report.checkpoints.includes(checkpointTimestamp))
       throw new Error("Checkpoint already exists in the report.");
+    console.log(skipValidation);
     if (
       !skipValidation &&
-      (timestamp === this.report.timestampId ||
-        timestamp === this.report.timestampId + MILLISECONDS_IN_DAY - 1)
+      (checkpointTimestamp === this.report.id ||
+        checkpointTimestamp === this.report.id + MILLISECONDS_IN_DAY - 1)
     )
       throw new Error(
         "Checkpoints in the first and last milliseconds of the day are not allowed.",
       );
-    this.report.checkpoints.push(timestamp);
+    this.report.checkpoints.push(checkpointTimestamp);
     this.report.checkpoints.sort((a, b) => a - b);
     this.calculateSum();
   }

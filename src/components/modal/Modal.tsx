@@ -9,6 +9,13 @@ type Props = PropsWithChildren & {
   close: () => void;
 };
 
+/**
+ * Wrapper reutilizável para modal, exibe o fundo desfocado 
+ * e controla fechamento e foco do modal
+ * @param children Conteúdo do modal
+ * @param className Classe(s) do container do modal
+ * @param close Callback que deve ser executado para fechar o modal
+ */
 const Modal = ({ children, className, close }: Props) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const ignoreCloseRef = useRef(false);

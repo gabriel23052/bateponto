@@ -8,7 +8,7 @@ type Props = {
 };
 
 /**
- * Exibe uma lista de períodos
+ * Exibe uma lista de batidas
  */
 const CheckpointList = ({ checkpoints, editMode }: Props) => {
   return (

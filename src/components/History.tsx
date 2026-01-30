@@ -9,7 +9,7 @@ import classes from "./History.module.css";
 const OBSERVER_HEIGHT = "4rem";
 
 /**
- * Componente que exibe o histórico de batidas
+ * Exibe o histórico de relatórios
  */
 const History = () => {
   const { reports, orderMoreReports } = useClockContext();
@@ -46,7 +46,7 @@ const History = () => {
       <h2 className={`neutral-dark text-large ${classes.title}`}>Histórico</h2>
       <ul className={classes.list}>
         {reports.data.slice(1).map((report) => (
-          <li key={report.timestampId}>
+          <li key={report.id}>
             <Report report={report} />
           </li>
         ))}

@@ -21,11 +21,11 @@ describe("ClockHandler", () => {
     it(`Cria os ${REPORTS_RANGE_DAYS} relatórios com ID's e objetos corretos`, () => {
       const clockHandler = new ClockHandler();
       const reports = clockHandler.getReports(0, 30);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
       for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
         expect(reports[i]).toEqual({
-          timestampId: today.getTime() - i * MILLISECONDS_IN_DAY,
+          id: todayDate.getTime() - i * MILLISECONDS_IN_DAY,
           checkpoints: [],
           sum: 0,
           hasAdjustment: false,
@@ -38,11 +38,11 @@ describe("ClockHandler", () => {
       createOutOfRangeReports(DAYS_AGO, REPORTS_RANGE_DAYS, "reports");
       const clockHandler = new ClockHandler();
       const reports = clockHandler.getReports(0, 30);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
       for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
         expect(reports[i]).toEqual({
-          timestampId: today.getTime() - i * MILLISECONDS_IN_DAY,
+          id: todayDate.getTime() - i * MILLISECONDS_IN_DAY,
           checkpoints: [],
           sum: 0,
           hasAdjustment: false,
@@ -52,21 +52,21 @@ describe("ClockHandler", () => {
 
     it("Adiciona batidas automáticas caso passe da meia noite em atividade", () => {
       const clockHandler = new ClockHandler();
-      const yesterday = new Date(new Date().getTime() - MILLISECONDS_IN_DAY);
-      yesterday.setHours(10, 30, 20, 155);
-      clockHandler.addCheckpoint(yesterday);
+      const yesterdayDate = new Date(new Date().getTime() - MILLISECONDS_IN_DAY);
+      yesterdayDate.setHours(10, 30, 20, 155);
+      clockHandler.addCheckpoint(yesterdayDate);
       const anotherClockHandler = new ClockHandler();
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
       const expectedTodayReport: TReport = {
-        timestampId: today.getTime(),
-        checkpoints: [today.getTime()],
+        id: todayDate.getTime(),
+        checkpoints: [todayDate.getTime()],
         sum: 0,
         hasAdjustment: false,
       };
       const expectedYesterdayReport: TReport = {
-        timestampId: today.getTime() - MILLISECONDS_IN_DAY,
-        checkpoints: [yesterday.getTime(), today.getTime() - 1],
+        id: todayDate.getTime() - MILLISECONDS_IN_DAY,
+        checkpoints: [yesterdayDate.getTime(), todayDate.getTime() - 1],
         sum: 48_579_844,
         hasAdjustment: true,
       };
@@ -106,9 +106,7 @@ describe("ClockHandler", () => {
       const clockHandler = new ClockHandler();
       const [yesterdayReport] = clockHandler.getReports(1, 1);
       yesterdayReport.hasAdjustment = true;
-      clockHandler.addCheckpoint(
-        new Date(yesterdayReport.timestampId + 10_000),
-      );
+      clockHandler.addCheckpoint(new Date(yesterdayReport.id + 10_000));
       const anotherClockHandler = new ClockHandler();
       expect(anotherClockHandler.getReports(1, 1)[0].checkpoints).toHaveLength(
         1,
@@ -119,63 +117,63 @@ describe("ClockHandler", () => {
   describe("addCheckpoint", () => {
     it("Adiciona batida no dia corrente", () => {
       const clockHandler = new ClockHandler();
-      const now = new Date();
-      clockHandler.addCheckpoint(now);
+      const nowDate = new Date();
+      clockHandler.addCheckpoint(nowDate);
       expect(clockHandler.getReports(0, 1)).toHaveLength(1);
       expect(clockHandler.getReports(0, 1)[0].checkpoints).toEqual([
-        now.getTime(),
+        nowDate.getTime(),
       ]);
     });
 
     it("Adiciona batida dez dias atrás", () => {
       const clockHandler = new ClockHandler();
-      const now = new Date();
-      const tenDaysAgo = new Date(now.getTime() - 10 * MILLISECONDS_IN_DAY);
-      clockHandler.addCheckpoint(tenDaysAgo);
+      const nowDate = new Date();
+      const tenDaysAgoDate = new Date(nowDate.getTime() - 10 * MILLISECONDS_IN_DAY);
+      clockHandler.addCheckpoint(tenDaysAgoDate);
       expect(clockHandler.getReports(10, 1)).toHaveLength(1);
       expect(clockHandler.getReports(10, 1)[0].checkpoints).toEqual([
-        tenDaysAgo.getTime(),
+        tenDaysAgoDate.getTime(),
       ]);
     });
 
     it("Falha ao adicionar batida fora do período", () => {
       const clockHandler = new ClockHandler();
-      const future = new Date();
-      future.setDate(future.getDate() + 5);
+      const futureDate = new Date();
+      futureDate.setDate(futureDate.getDate() + 5);
       expect(() => {
-        clockHandler.addCheckpoint(future);
+        clockHandler.addCheckpoint(futureDate);
       }).toThrow("Report don't found");
     });
 
     it("Falha ao adicionar no futuro", () => {
       const clockHandler = new ClockHandler();
-      const future = new Date();
-      future.setSeconds(future.getSeconds() + 5);
+      const futureDate = new Date();
+      futureDate.setSeconds(futureDate.getSeconds() + 5);
       expect(() => {
-        clockHandler.addCheckpoint(future);
+        clockHandler.addCheckpoint(futureDate);
       }).toThrow("The report cannot be in the future");
     });
 
     it("Falha ao adicionar batida repetida", () => {
       const clockHandler = new ClockHandler();
-      const now = new Date();
-      clockHandler.addCheckpoint(now);
+      const nowDate = new Date();
+      clockHandler.addCheckpoint(nowDate);
       expect(() => {
-        clockHandler.addCheckpoint(now);
+        clockHandler.addCheckpoint(nowDate);
       }).toThrow("Checkpoint already exists in the report");
     });
 
     it("Soma os períodos corretamente", () => {
       const clockHandler = new ClockHandler();
-      const yesterday = new Date(new Date().getTime() - MILLISECONDS_IN_DAY);
-      yesterday.setHours(2, 52, 12, 65); // 10332065ms
-      clockHandler.addCheckpoint(yesterday);
-      yesterday.setHours(3, 6, 52, 747); // 11212747ms
-      clockHandler.addCheckpoint(yesterday);
-      yesterday.setHours(12, 43, 32, 858); // 45812858ms
-      clockHandler.addCheckpoint(yesterday);
-      yesterday.setHours(15, 29, 4, 472); // 55744472ms
-      clockHandler.addCheckpoint(yesterday);
+      const yesterdayDate = new Date(new Date().getTime() - MILLISECONDS_IN_DAY);
+      yesterdayDate.setHours(2, 52, 12, 65); // 10332065ms
+      clockHandler.addCheckpoint(yesterdayDate);
+      yesterdayDate.setHours(3, 6, 52, 747); // 11212747ms
+      clockHandler.addCheckpoint(yesterdayDate);
+      yesterdayDate.setHours(12, 43, 32, 858); // 45812858ms
+      clockHandler.addCheckpoint(yesterdayDate);
+      yesterdayDate.setHours(15, 29, 4, 472); // 55744472ms
+      clockHandler.addCheckpoint(yesterdayDate);
       // 11212747ms - 10332065ms = 880682ms
       // 45812858ms - 55744472ms = 9931614ms
       // 880682ms + 9931614ms = 10812296ms
@@ -195,13 +193,11 @@ describe("ClockHandler", () => {
       clockHandler.reportsMap.clear();
       // @ts-expect-error — acesso intencional a membro privado para teste
       clockHandler.getReportsFromLocalStorage();
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
       expect(clockHandler.getReports(0, 1)).toHaveLength(0);
       clockHandler.refresh();
-      expect(clockHandler.getReports(0, 1)[0].timestampId).toBe(
-        today.getTime(),
-      );
+      expect(clockHandler.getReports(0, 1)[0].id).toBe(todayDate.getTime());
     });
   });
 });

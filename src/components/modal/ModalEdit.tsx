@@ -13,6 +13,9 @@ import DateUtility from "../../utils/DateUtility";
 
 import classes from "./ModalEdit.module.css";
 
+/**
+ * Exibe o modal de edição de relatórios
+ */
 const ModalEdit = () => {
   const [error, setError] = useState<null | string>(null);
 
@@ -27,7 +30,7 @@ const ModalEdit = () => {
       close={cleanEditReport}
     >
       <ModalTitleBar closeModal={cleanEditReport}>
-        {`Relatório do dia ${new Date(inEditionReport.timestampId).toLocaleDateString("pt-br")}`}
+        {`Relatório do dia ${new Date(inEditionReport.id).toLocaleDateString("pt-br")}`}
       </ModalTitleBar>
       <div className={classes.reportInfo}>
         {inEditionReport.checkpoints.length === 0 ? (

@@ -16,6 +16,10 @@ type Props = {
   setError: Dispatch<SetStateAction<string | null>>;
 };
 
+/**
+ * Exibe um input do tipo "time" para editar novas batidas na edição
+ * @param setError Callback para setar erros
+ */
 const CheckpointInput = ({ setError }: Props) => {
   const [newCheckpoint, setNewCheckpoint] = useState({
     value: "00:00",
@@ -28,14 +32,15 @@ const CheckpointInput = ({ setError }: Props) => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const [hr, min] = newCheckpoint.value.split(":").map(Number);
-    const checkpointDate = new Date((inEditionReport as TReport).timestampId);
-    checkpointDate.setHours(hr, min);
-    const error = validateNewCheckpoint(checkpointDate);
+    const newCheckpointDate = new Date((inEditionReport as TReport).id);
+    // Adiciona um milissegundo caso a batida seja meia noite
+    newCheckpointDate.setHours(hr, min, 0, hr === 0 && min === 0 ? 1 : 0);
+    const error = validateNewCheckpoint(newCheckpointDate);
     if (error !== null) {
       setError(error);
       return;
     }
-    addCheckpoint(checkpointDate);
+    addCheckpoint(newCheckpointDate);
     setError(null);
     setNewCheckpoint({ value: "00:00", hasEdited: false });
   };

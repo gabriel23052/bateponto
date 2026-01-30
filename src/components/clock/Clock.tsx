@@ -8,7 +8,7 @@ import { useClockContext } from "../../contexts/ClockContext";
 import classes from "./Clock.module.css";
 
 /**
- * Componente do relógio animado
+ * Exibe um relógio com dígitos animados
  */
 const Clock = () => {
   const getDigits = () =>

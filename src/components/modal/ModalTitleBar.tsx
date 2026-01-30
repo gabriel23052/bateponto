@@ -9,6 +9,11 @@ type Props = PropsWithChildren & {
   closeModal: () => void;
 };
 
+/**
+ * Barra de título para modal
+ * @param children Título a ser exibido
+ * @param closeModal Callback para fechar o modal
+ */
 const ModalTitleBar = ({ children, closeModal }: Props) => {
   return (
     <div className={classes.container}>

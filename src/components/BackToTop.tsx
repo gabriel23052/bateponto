@@ -7,6 +7,9 @@ import classes from "./BackToTop.module.css";
 const DEBOUNCE_DELAY = 200;
 const OFFSET_TO_SHOW_SHORTCUT = 200;
 
+/**
+ * Exibe o botão para voltar ao topo da página
+ */
 const BackToTop = () => {
   const [showShortcut, setShowShortcut] = useState(false);
 

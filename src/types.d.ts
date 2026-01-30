@@ -9,7 +9,7 @@ type TReportViewDate = {
 };
 
 type TReport = {
-  timestampId: number;
+  id: number;
   checkpoints: number[];
   sum: number;
   hasAdjustment: boolean;

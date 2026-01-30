@@ -4,7 +4,6 @@ import DateText from "./DateText";
 import CheckpointButton from "./checkpoint/CheckpointButton";
 import TodayReport from "./TodayReport";
 import History from "./History";
-import ModalEditWrapper from "./modal/ModalEditWrapper";
 import ModalNotice from "./modal/ModalNotice";
 import BackToTop from "./BackToTop";
 
@@ -12,9 +11,10 @@ import { ClockContextProvider } from "../contexts/ClockContext";
 import { EditContextProvider } from "../contexts/EditContext";
 
 import classes from "./App.module.css";
+import ModalEdit from "./modal/ModalEdit";
 
 /**
- * Componente container da aplicação
+ * Container da aplicação
  */
 const App = () => {
   return (
@@ -28,7 +28,7 @@ const App = () => {
         <EditContextProvider>
           <TodayReport />
           <History />
-          <ModalEditWrapper />
+          <ModalEdit />
         </EditContextProvider>
       </ClockContextProvider>
       <BackToTop />
