@@ -1,4 +1,4 @@
-import DateUtility from "./DateUtility";
+import DateUtility from "../utils/DateUtility";
 import ReportHandler from "./ReportHandler";
 
 const MILLISECONDS_IN_DAY = 86_400_000;

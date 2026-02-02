@@ -41,7 +41,7 @@ const BackToTop = () => {
       title="Voltar para o ínicio"
       onClick={clickHandler}
     >
-      <ArrowIcon width={24} height={24} />
+      <ArrowIcon width={24} height={24} aria-hidden="true" />
     </button>
   );
 };

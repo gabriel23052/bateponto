@@ -44,6 +44,7 @@ const Modal = ({ children, className, close }: Props) => {
       onClose={handleClose}
       ref={dialogRef}
       closedby="any"
+      aria-modal="true"
     >
       {children}
     </dialog>,

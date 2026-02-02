@@ -1,0 +1,8 @@
+.logo {
+  width: 12.5rem; /* 200px */
+  display: block;
+  margin-inline: auto;
+  margin-bottom: var(--px4);
+  color: var(--neutral-dark);
+}
+

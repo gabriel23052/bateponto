@@ -16,13 +16,11 @@ const ModalNotice = () => {
 
   const [show, setShow] = useState(() => {
     const { id, status } = reports.data[1];
-    if (status !== "corrected") return;
+    if (status !== "corrected") return false;
     const lastNotifiedId = Number(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (lastNotifiedId === 0) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, id.toString());
-      return true;
-    }
-    return id !== lastNotifiedId;
+    if (lastNotifiedId === id) return false;
+    localStorage.setItem(LOCAL_STORAGE_KEY, id.toString());
+    return true;
   });
 
   if (!show) return null;
@@ -34,8 +32,8 @@ const ModalNotice = () => {
     >
       <h2 className="text-large neutral-dark">Aviso</h2>
       <p className={`text-default neutral-darkgray`}>
-        Foram adicionadas batidas às <time>23:59</time> de ontem e <time>00:00</time> de
-        hoje, pois ontem o dia encerrou em atividade
+        Foram adicionadas batidas às <time>23:59</time> de ontem e{" "}
+        <time>00:00</time> de hoje, pois ontem o dia encerrou em atividade
       </p>
       <button
         className={`neutral-white bg-neutral-dark text-default`}

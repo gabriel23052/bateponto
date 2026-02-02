@@ -20,6 +20,8 @@ const Report = ({ report, disableAlert }: Props) => {
   const { inActivity } = useClockContext();
   const { editReport } = useEditContext();
 
+  const viewDate = DateUtility.getReportViewDate(report.id);
+
   return (
     <button
       className={`bg-neutral-white ${classes.button} ${
@@ -28,8 +30,10 @@ const Report = ({ report, disableAlert }: Props) => {
       onClick={() => {
         editReport(report);
       }}
+      aria-label={"Relatório do dia " + viewDate.shortDate + ", clique para editar"}
+      aria-haspopup="dialog"
     >
-      <ReportDate date={DateUtility.getReportViewDate(report.id)} />
+      <ReportDate date={viewDate} />
       {report.checkpoints.length === 0 ? (
         <p className={`neutral-lightgray text-default ${classes.noActivity}`}>
           Sem atividade

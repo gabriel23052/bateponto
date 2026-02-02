@@ -47,12 +47,17 @@ const Clock = () => {
     <section
       className={`${inActivity ? "activity" : "standby"} ${classes.container}`}
     >
+      <span
+        className={classes.acessibilityClock}
+        aria-label="Relógio"
+        aria-live="off"
+      >{`${clock[0]}${clock[1]}:${clock[2]}${clock[3]}:${clock[4]}${clock[5]}`}</span>
       <ClockDigit digit={clock[0]} />
       <ClockDigit digit={clock[1]} />
-      <span className="text-display">:</span>
+      <span className="text-display" aria-hidden="true">:</span>
       <ClockDigit digit={clock[2]} />
       <ClockDigit digit={clock[3]} />
-      <span className="text-display">:</span>
+      <span className="text-display" aria-hidden="true">:</span>
       <ClockDigit digit={clock[4]} />
       <ClockDigit digit={clock[5]} />
     </section>

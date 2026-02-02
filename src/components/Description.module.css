@@ -1,0 +1,6 @@
+.text {
+  max-width: 30rem; /* 448px */
+  margin-inline: auto;
+  margin-bottom: var(--px64);
+  text-align: center;
+}

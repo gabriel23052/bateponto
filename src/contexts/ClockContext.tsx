@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 
-import ClockHandler from "../utils/ClockHandler";
+import ClockHandler from "../handlers/ClockHandler";
 
 type ProviderProps = {
   children: ReactNode;

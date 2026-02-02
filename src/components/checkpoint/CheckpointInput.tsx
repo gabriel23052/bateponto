@@ -64,8 +64,9 @@ const CheckpointInput = ({ setError }: Props) => {
       <button
         className={`bg-neutral-dark ${classes.button}`}
         disabled={newCheckpoint.value.length === 0 || !newCheckpoint.hasEdited}
+        title="Adicionar batida"
       >
-        <ClockAddIcon width={24} height={24} />
+        <ClockAddIcon width={24} height={24} aria-hidden="true" />
       </button>
     </form>
   );

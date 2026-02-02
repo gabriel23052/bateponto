@@ -1,4 +1,5 @@
-import Greeting from "./Greeting";
+import Logo from "./Logo";
+import Description from "./Description";
 import Clock from "./clock/Clock";
 import DateText from "./DateText";
 import CheckpointButton from "./checkpoint/CheckpointButton";
@@ -6,12 +7,12 @@ import TodayReport from "./TodayReport";
 import History from "./History";
 import ModalNotice from "./modal/ModalNotice";
 import BackToTop from "./BackToTop";
+import ModalEdit from "./modal/ModalEdit";
 
 import { ClockContextProvider } from "../contexts/ClockContext";
 import { EditContextProvider } from "../contexts/EditContext";
 
 import classes from "./App.module.css";
-import ModalEdit from "./modal/ModalEdit";
 
 /**
  * Container da aplicação
@@ -19,7 +20,8 @@ import ModalEdit from "./modal/ModalEdit";
 const App = () => {
   return (
     <main className={classes.container}>
-      <Greeting />
+      <Logo />
+      <Description />
       <ClockContextProvider>
         <ModalNotice />
         <Clock />

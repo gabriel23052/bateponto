@@ -55,12 +55,12 @@ const CheckpointButton = () => {
         {inActivity ? (
           <>
             parar
-            <StopIcon width={22} height={22} />
+            <StopIcon width={22} height={22} aria-hidden="true" />
           </>
         ) : (
           <>
             iniciar
-            <PlayIcon width={20} height={25} />
+            <PlayIcon width={20} height={25} aria-hidden="true" />
           </>
         )}
       </button>
@@ -69,8 +69,9 @@ const CheckpointButton = () => {
         style={{
           top: inActivity ? "calc(100% + var(--px8))" : "0px",
         }}
+        aria-hidden={!inActivity}
       >
-        Em atividade desde {getLastCheckpoint()}
+        Em atividade desde <time>{getLastCheckpoint()}</time>
       </p>
     </section>
   );

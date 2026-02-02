@@ -34,8 +34,9 @@ const Checkpoint = ({ start, end, editMode }: Props) => {
           onClick={() => {
             eraseCheckpoint(start);
           }}
+          title="Apagar batida"
         >
-          <EraseIcon width={12} height={12} />
+          <EraseIcon width={12} height={12} aria-hidden="true" />
         </button>
       )}
       <time dateTime={getTimeString(start)}>{getTimeString(start)}</time>
@@ -47,8 +48,9 @@ const Checkpoint = ({ start, end, editMode }: Props) => {
               onClick={() => {
                 eraseCheckpoint(end);
               }}
+              title="Apagar batida"
             >
-              <EraseIcon width={12} height={12} />
+              <EraseIcon width={12} height={12} aria-hidden="true" />
             </button>
           )}
         </>

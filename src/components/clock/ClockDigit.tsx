@@ -48,7 +48,7 @@ const ClockDigit = ({ digit }: Props) => {
   }, [digit]);
 
   return (
-    <div className={`text-display ${classes.container}`}>
+    <div className={`text-display ${classes.container}`} aria-hidden="true">
       <span
         ref={(el) => {
           chars.current[0] = el;

@@ -18,8 +18,8 @@ const ModalTitleBar = ({ children, closeModal }: Props) => {
   return (
     <div className={classes.container}>
       <h2 className="neutral-dark text-default">{children}</h2>
-      <button onClick={closeModal}>
-        <CloseIcon width={16} height={16} />
+      <button onClick={closeModal} title="Fechar">
+        <CloseIcon width={16} height={16} aria-hidden="true" />
       </button>
     </div>
   );

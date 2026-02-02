@@ -62,7 +62,7 @@ const ModalEdit = () => {
           disabled={!hasEdited}
         >
           salvar
-          <SaveIcon width={24} height={24} />
+          <SaveIcon width={24} height={24} aria-hidden="true" />
         </button>
       </div>
     </Modal>

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import ClockHandler from "../src/utils/ClockHandler";
+import ClockHandler from "../src/handlers/ClockHandler";
 import { createOutOfRangeReports } from "./helpers";
 import DateUtility from "../src/utils/DateUtility";
 
