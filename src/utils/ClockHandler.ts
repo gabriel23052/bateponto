@@ -65,13 +65,14 @@ export default class ClockHandler {
    */
   private createReports() {
     const todayId = DateUtility.getReportIdFromDate(new Date());
+    const yesterdayId = todayId - MILLISECONDS_IN_DAY;
     for (let i = 0; i < REPORTS_RANGE_DAYS; i++) {
       const newReportId = todayId - i * MILLISECONDS_IN_DAY;
       const emptyReport: TReport = {
         id: newReportId,
         checkpoints: [],
         sum: 0,
-        hasAdjustment: false,
+        status: newReportId === yesterdayId ? "verified" : "notVerified",
       };
       this.reportsMap.set(newReportId, emptyReport);
     }
@@ -85,6 +86,7 @@ export default class ClockHandler {
   private updateReportsRange() {
     const ids = Array.from(this.reportsMap.keys());
     const todayId = DateUtility.getReportIdFromDate(new Date());
+    const yesterdayId = todayId - MILLISECONDS_IN_DAY;
     const limitId = todayId - (REPORTS_RANGE_DAYS - 1) * MILLISECONDS_IN_DAY;
     const toErase = ids.filter((id) => id < limitId);
     if (toErase.length === 0) return;
@@ -95,7 +97,7 @@ export default class ClockHandler {
         id: newReportId,
         checkpoints: [],
         sum: 0,
-        hasAdjustment: false,
+        status: newReportId === yesterdayId ? "verified" : "notVerified",
       });
     }
     this.updateLocalStorage();
@@ -107,17 +109,19 @@ export default class ClockHandler {
    */
   private adjustYesterdayIfNeeds() {
     const [yesterdayReport] = this.getReports(1, 1);
-    if (
-      yesterdayReport.checkpoints.length % 2 === 0 ||
-      yesterdayReport.hasAdjustment
-    )
+    if (yesterdayReport.status !== "notVerified") return;
+    yesterdayReport.status = "verified";
+    if (yesterdayReport.checkpoints.length % 2 === 0) {
+      this.updateLocalStorage();
       return;
+    }
     const [todayReport] = this.getReports(0, 1);
     const yesterdayCheckpointDate = new Date(todayReport.id - 1);
     const todayCheckpointDate = new Date(todayReport.id);
-    yesterdayReport.hasAdjustment = true;
     this.addCheckpoint(yesterdayCheckpointDate, true);
     this.addCheckpoint(todayCheckpointDate, true);
+    yesterdayReport.status = "corrected";
+    this.updateLocalStorage();
   }
 
   /**

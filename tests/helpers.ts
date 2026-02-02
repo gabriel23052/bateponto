@@ -6,17 +6,19 @@ export function createOutOfRangeReports(
   localStorageKey: string,
 ) {
   const reports: TReportKeyValue[] = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+  const yesterdayDate = new Date(todayDate);
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
   for (let i = 0; i < amount; i++) {
-    const id = today.getTime() - (daysAgo + i) * MILLISECONDS_IN_DAY;
+    const id = todayDate.getTime() - (daysAgo + i) * MILLISECONDS_IN_DAY;
     reports.push([
       id,
       {
         id: id,
         checkpoints: [],
         sum: 0,
-        hasAdjustment: false,
+        status: id === yesterdayDate.getTime() ? "verified" : "notVerified",
       },
     ]);
   }

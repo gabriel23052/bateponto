@@ -26,7 +26,6 @@ export default class ReportHandler {
     const checkpointTimestamp = newCheckpointDate.getTime();
     if (this.report.checkpoints.includes(checkpointTimestamp))
       throw new Error("Checkpoint already exists in the report.");
-    console.log(skipValidation);
     if (
       !skipValidation &&
       (checkpointTimestamp === this.report.id ||

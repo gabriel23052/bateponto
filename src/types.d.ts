@@ -12,7 +12,7 @@ type TReport = {
   id: number;
   checkpoints: number[];
   sum: number;
-  hasAdjustment: boolean;
+  status: "notVerified" | "verified" | "corrected";
 };
 
 type TReportKeyValue = [number, TReport];

@@ -16,6 +16,10 @@
   margin-bottom: var(--px16);
 }
 
+.container time {
+  font-weight: 500;
+}
+
 .container button {
   display: block;
   margin-inline: auto;
